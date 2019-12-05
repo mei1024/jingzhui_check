@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solar.cms.dal.dao.ext.CmsNewsExtDao">
+
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsNews">
+        SELECT
+	        a.id as id,
+	        a.province_id as provinceId,
+	        a.city_id as cityId,
+	        a.district_id as districtId,
+	        a.villages_id as villagesId,
+	        a.hamlet_id as hamletId,
+	        b.sortno,
+	        b.check_date,
+	        b.publish_date
+        FROM 
+        	cms_news a 
+        INNER JOIN cms_content b ON a.id=b.id
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND a.id = #{condition.id}
+            </if>
+            <if test="condition.keyword!=null">
+                AND CONCAT( IFNULL(b.title,''), IFNULL(b.description,'')  ) LIKE CONCAT('%', #{condition.keyword} , '%')
+            </if> 
+            <if test="condition.provinceId!=null">
+                AND a.province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.tagId!=null">
+                AND b.tag_ids LIKE CONCAT('%', #{condition.tagId} , '%')
+            </if>
+            <if test="condition.cityId!=null">
+                AND a.city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND a.district_id = #{condition.districtId}
+            </if>
+            <if test="condition.villagesId!=null">
+                AND a.villages_id = #{condition.villagesId}
+            </if>
+            <if test="condition.hamletId!=null">
+                AND a.hamlet_id = #{condition.hamletId}
+            </if>
+            <if test="condition.categoryId!=null">
+                AND b.category_id = #{condition.categoryId}
+            </if>
+            <if test="condition.status!=null">
+                AND b.status = #{condition.status}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND b.create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>  
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) 
+        FROM 
+        	cms_news a 
+        INNER JOIN cms_content b ON a.id=b.id
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND a.id = #{condition.id}
+            </if>
+            <if test="condition.keyword!=null">
+                AND CONCAT( IFNULL(b.title,''), IFNULL(b.description,'')  ) LIKE CONCAT('%', #{condition.keyword} , '%')
+            </if> 
+            <if test="condition.provinceId!=null">
+                AND a.province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.tagId!=null">
+                AND b.tag_ids LIKE CONCAT('%', #{condition.tagId} , '%')
+            </if>
+            <if test="condition.cityId!=null">
+                AND a.city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND a.district_id = #{condition.districtId}
+            </if>
+            <if test="condition.villagesId!=null">
+                AND a.villages_id = #{condition.villagesId}
+            </if>
+            <if test="condition.hamletId!=null">
+                AND a.hamlet_id = #{condition.hamletId}
+            </if>
+            <if test="condition.categoryId!=null">
+                AND b.category_id = #{condition.categoryId}
+            </if>
+            <if test="condition.status!=null">
+                AND b.status = #{condition.status}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND b.create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>  
+        </trim>
+   </select>
+        
+</mapper>

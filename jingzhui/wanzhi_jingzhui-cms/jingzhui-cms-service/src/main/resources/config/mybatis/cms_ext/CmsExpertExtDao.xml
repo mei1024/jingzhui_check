@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solar.cms.dal.dao.ext.CmsExpertExtDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        real_name as realName,
+        avatar_url as avatarUrl,
+        duty as duty,
+        organization as organization,
+        introduction as introduction,
+        genius_tag_ids as geniusTagIds,
+        genius as genius,
+        sortno as sortno,
+        hidden as hidden,
+        memo as memo,
+        dstatus as dstatus,
+        creator as creator,
+        create_date as createDate,
+        last_modifier as lastModifier,
+        last_mod_date as lastModDate,
+        version as version
+    </sql>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsExpert">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND `id` = #{condition.id}
+            </if>
+            <if test="condition.keyword!=null">
+                AND CONCAT( IFNULL(real_name,''), IFNULL(duty,''), IFNULL(organization,'')  ) LIKE CONCAT('%', #{condition.keyword} , '%')
+            </if> 
+            <if test="condition.geniusTagId!=null">
+                AND `genius_tag_ids` LIKE CONCAT('%', #{condition.geniusTagId} , '%')
+            </if>
+            <if test="condition.realName!=null">
+                AND `real_name` = #{condition.realName}
+            </if>
+            <if test="condition.duty!=null">
+                AND `duty` = #{condition.duty}
+            </if>
+            <if test="condition.organization!=null">
+                AND `organization` = #{condition.organization}
+            </if>
+            <if test="condition.genius!=null">
+                AND `genius` = #{condition.genius}
+            </if>
+            <if test="condition.hidden!=null">
+                AND `hidden` = #{condition.hidden}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND `dstatus` = #{condition.dstatus}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+   
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_expert
+              <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND `id` = #{condition.id}
+            </if>
+            <if test="condition.keyword!=null">
+                AND CONCAT( IFNULL(real_name,''), IFNULL(duty,''), IFNULL(organization,'')  ) LIKE CONCAT('%', #{condition.keyword} , '%')
+            </if> 
+            <if test="condition.geniusTagId!=null">
+                AND `genius_tag_ids` LIKE CONCAT('%', #{condition.geniusTagId} , '%')
+            </if>
+            <if test="condition.realName!=null">
+                AND `real_name` = #{condition.realName}
+            </if>
+            <if test="condition.duty!=null">
+                AND `duty` = #{condition.duty}
+            </if>
+            <if test="condition.organization!=null">
+                AND `organization` = #{condition.organization}
+            </if>
+            <if test="condition.genius!=null">
+                AND `genius` = #{condition.genius}
+            </if>
+            <if test="condition.hidden!=null">
+                AND `hidden` = #{condition.hidden}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND `dstatus` = #{condition.dstatus}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+        </trim>
+   </select>
+
+</mapper>

@@ -1,0 +1,99 @@
+buildscript {
+	ext {
+		springBootPluginVersion = '2.0.0.RC2'
+	}
+	repositories {
+		mavenLocal() 
+		maven { url 'http://113.140.30.46:20008/nexus/content/groups/public/' }
+		maven { url "https://repo.spring.io/milestone" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootPluginVersion}")
+	}
+}
+
+allprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+    
+    sourceCompatibility = 1.8
+	
+    version = version
+    group = projectGroup
+    ext {
+        fastjsonVersion = '1.2.49'
+  		commonsLang3Version = '3.9'
+
+        solarAuthVersion='2.3'
+        solarCommonVersion='2.0'
+        solarMasVersion='2.0'
+        solarMsVersion='2.0'
+        solarDsVersion='2.1'
+        
+        larkCoreVersion = '1.44'
+    }
+
+    [compileJava, javadoc, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    defaultTasks 'clean'
+
+    task sourceJar(type: Jar) {
+        classifier 'sources'
+        from sourceSets.main.allJava
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier 'javadoc'
+        from javadoc.destinationDir
+    }
+	//task wrapper(type: Wrapper) {
+	//    gradleVersion = '3.0'
+	//}
+ 
+    repositories {
+        mavenLocal()
+        maven { url 'http://113.140.30.46:20008/nexus/content/groups/public/' }
+		maven { url "https://repo.spring.io/milestone" }
+		maven { url "https://repo.spring.io/libs-release" }
+    }
+}
+
+
+
+subprojects {
+
+    dependencies {
+        /** test**/
+   	    testCompile('org.springframework.boot:spring-boot-starter-test')	
+	 	
+	 	/** commons **/
+	    compile "com.alibaba:fastjson:${fastjsonVersion}"
+	    compile "org.projectlombok:lombok:1.18.2"
+	    
+	    /** springfox-swagger2 **/
+	    compile "io.springfox:springfox-swagger2:2.2.2"
+	    compile "io.springfox:springfox-swagger-ui:2.2.2"	
+    }
+    
+	ext {
+		springCloudVersion = 'Finchley.RC1'
+		springBootAdminVersion = '2.0.0'
+	}
+	
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+			mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
+		}
+	}
+ 
+    jar {
+        enabled = true
+    }
+}

@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.uc.dal.dao.MemberLogDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        user_id as userId,
+        opt_type as optType,
+        opt_time as optTime,
+        ip as ip,
+        ip_area as ipArea,
+        opt_remark as optRemark,
+        memo as memo,
+        dstatus as dstatus,
+        creator as creator,
+        create_date as createDate,
+        last_modifier as lastModifier,
+        last_mod_date as lastModDate,
+        version as version
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="MemberLog">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member_log
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="MemberLog">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member_log
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="MemberLog">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member_log
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userId!=null">
+                AND user_id = #{condition.userId}
+            </if>
+            <if test="condition.optType!=null">
+                AND opt_type = #{condition.optType}
+            </if>
+            <if test="condition.optTime!=null">
+                AND opt_time = #{condition.optTime}
+            </if>
+            <if test="condition.ip!=null">
+                AND ip = #{condition.ip}
+            </if>
+            <if test="condition.ipArea!=null">
+                AND ip_area = #{condition.ipArea}
+            </if>
+            <if test="condition.optRemark!=null">
+                AND opt_remark = #{condition.optRemark}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="MemberLog">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member_log
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="MemberLog">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member_log
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userId!=null">
+                AND user_id = #{condition.userId}
+            </if>
+            <if test="condition.optType!=null">
+                AND opt_type = #{condition.optType}
+            </if>
+            <if test="condition.optTime!=null">
+                AND opt_time = #{condition.optTime}
+            </if>
+            <if test="condition.ip!=null">
+                AND ip = #{condition.ip}
+            </if>
+            <if test="condition.ipArea!=null">
+                AND ip_area = #{condition.ipArea}
+            </if>
+            <if test="condition.optRemark!=null">
+                AND opt_remark = #{condition.optRemark}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="MemberLog">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member_log WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="MemberLog">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member_log WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="MemberLog">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member_log
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userId!=null">
+                AND user_id = #{condition.userId}
+            </if>
+            <if test="condition.optType!=null">
+                AND opt_type = #{condition.optType}
+            </if>
+            <if test="condition.optTime!=null">
+                AND opt_time = #{condition.optTime}
+            </if>
+            <if test="condition.ip!=null">
+                AND ip = #{condition.ip}
+            </if>
+            <if test="condition.ipArea!=null">
+                AND ip_area = #{condition.ipArea}
+            </if>
+            <if test="condition.optRemark!=null">
+                AND opt_remark = #{condition.optRemark}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                       
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="MemberLog">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member_log
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.userId!=null">
+               AND user_id like CONCAT('%', #{condition.userId} , '%')
+            </if>
+            <if test="condition.optType!=null">
+               AND opt_type like CONCAT('%', #{condition.optType} , '%')
+            </if>
+            <if test="condition.optTime!=null">
+               AND opt_time like CONCAT('%', #{condition.optTime} , '%')
+            </if>
+            <if test="condition.ip!=null">
+               AND ip like CONCAT('%', #{condition.ip} , '%')
+            </if>
+            <if test="condition.ipArea!=null">
+               AND ip_area like CONCAT('%', #{condition.ipArea} , '%')
+            </if>
+            <if test="condition.optRemark!=null">
+               AND opt_remark like CONCAT('%', #{condition.optRemark} , '%')
+            </if>
+            <if test="condition.memo!=null">
+               AND memo like CONCAT('%', #{condition.memo} , '%')
+            </if>
+            <if test="condition.dstatus!=null">
+               AND dstatus like CONCAT('%', #{condition.dstatus} , '%')
+            </if>
+            <if test="condition.creator!=null">
+               AND creator like CONCAT('%', #{condition.creator} , '%')
+            </if>
+            <if test="condition.createDate!=null">
+               AND create_date like CONCAT('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.lastModifier!=null">
+               AND last_modifier like CONCAT('%', #{condition.lastModifier} , '%')
+            </if>
+            <if test="condition.lastModDate!=null">
+               AND last_mod_date like CONCAT('%', #{condition.lastModDate} , '%')
+            </if>
+            <if test="condition.version!=null">
+               AND version like CONCAT('%', #{condition.version} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM uc_member_log
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userId!=null">
+                AND user_id = #{condition.userId}
+            </if>
+            <if test="condition.optType!=null">
+                AND opt_type = #{condition.optType}
+            </if>
+            <if test="condition.optTime!=null">
+                AND opt_time = #{condition.optTime}
+            </if>
+            <if test="condition.ip!=null">
+                AND ip = #{condition.ip}
+            </if>
+            <if test="condition.ipArea!=null">
+                AND ip_area = #{condition.ipArea}
+            </if>
+            <if test="condition.optRemark!=null">
+                AND opt_remark = #{condition.optRemark}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM uc_member_log
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userId!=null">
+                AND user_id = #{condition.userId}
+            </if>
+            <if test="condition.optType!=null">
+                AND opt_type = #{condition.optType}
+            </if>
+            <if test="condition.optTime!=null">
+                AND opt_time = #{condition.optTime}
+            </if>
+            <if test="condition.ip!=null">
+                AND ip = #{condition.ip}
+            </if>
+            <if test="condition.ipArea!=null">
+                AND ip_area = #{condition.ipArea}
+            </if>
+            <if test="condition.optRemark!=null">
+                AND opt_remark = #{condition.optRemark}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="MemberLog" >
+        INSERT INTO uc_member_log (
+	        id,
+	        user_id,
+	        opt_type,
+	        opt_time,
+	        ip,
+	        ip_area,
+	        opt_remark,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES (
+	        #{id},
+	        #{userId},
+	        #{optType},
+	        #{optTime},
+	        #{ip},
+	        #{ipArea},
+	        #{optRemark},
+	        #{memo},
+	        #{dstatus},
+	        #{creator},
+	        #{createDate},
+	        #{lastModifier},
+	        #{lastModDate},
+	        #{version}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list" >
+        INSERT INTO uc_member_log (
+	        id,
+	        user_id,
+	        opt_type,
+	        opt_time,
+	        ip,
+	        ip_area,
+	        opt_remark,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.id},
+	        #{item.userId},
+	        #{item.optType},
+	        #{item.optTime},
+	        #{item.ip},
+	        #{item.ipArea},
+	        #{item.optRemark},
+	        #{item.memo},
+	        #{item.dstatus},
+	        #{item.creator},
+	        #{item.createDate},
+	        #{item.lastModifier},
+	        #{item.lastModDate},
+	        #{item.version}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="MemberLog">
+        UPDATE uc_member_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="optType != null">
+                opt_type = #{optType},
+            </if>
+            <if test="optTime != null">
+                opt_time = #{optTime},
+            </if>
+            <if test="ip != null">
+                ip = #{ip},
+            </if>
+            <if test="ipArea != null">
+                ip_area = #{ipArea},
+            </if>
+            <if test="optRemark != null">
+                opt_remark = #{optRemark},
+            </if>
+            <if test="memo != null">
+                memo = #{memo},
+            </if>
+            <if test="dstatus != null">
+                dstatus = #{dstatus},
+            </if>
+            <if test="creator != null">
+                creator = #{creator},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="lastModifier != null">
+                last_modifier = #{lastModifier},
+            </if>
+            <if test="lastModDate != null">
+                last_mod_date = #{lastModDate},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="MemberLog">
+        UPDATE uc_member_log
+        <trim prefix="SET" suffixOverrides=",">
+                user_id = #{userId},
+                opt_type = #{optType},
+                opt_time = #{optTime},
+                ip = #{ip},
+                ip_area = #{ipArea},
+                opt_remark = #{optRemark},
+                memo = #{memo},
+                dstatus = #{dstatus},
+                creator = #{creator},
+                create_date = #{createDate},
+                last_modifier = #{lastModifier},
+                last_mod_date = #{lastModDate},
+                version = #{version},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE uc_member_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.userId!=null">
+                user_id = #{update.userId},
+            </if>
+            <if test="update.optType!=null">
+                opt_type = #{update.optType},
+            </if>
+            <if test="update.optTime!=null">
+                opt_time = #{update.optTime},
+            </if>
+            <if test="update.ip!=null">
+                ip = #{update.ip},
+            </if>
+            <if test="update.ipArea!=null">
+                ip_area = #{update.ipArea},
+            </if>
+            <if test="update.optRemark!=null">
+                opt_remark = #{update.optRemark},
+            </if>
+            <if test="update.memo!=null">
+                memo = #{update.memo},
+            </if>
+            <if test="update.dstatus!=null">
+                dstatus = #{update.dstatus},
+            </if>
+            <if test="update.creator!=null">
+                creator = #{update.creator},
+            </if>
+            <if test="update.createDate!=null">
+                create_date = #{update.createDate},
+            </if>
+            <if test="update.lastModifier!=null">
+                last_modifier = #{update.lastModifier},
+            </if>
+            <if test="update.lastModDate!=null">
+                last_mod_date = #{update.lastModDate},
+            </if>
+            <if test="update.version!=null">
+                version = #{update.version},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userId!=null">
+                AND user_id = #{condition.userId}
+            </if>
+            <if test="condition.optType!=null">
+                AND opt_type = #{condition.optType}
+            </if>
+            <if test="condition.optTime!=null">
+                AND opt_time = #{condition.optTime}
+            </if>
+            <if test="condition.ip!=null">
+                AND ip = #{condition.ip}
+            </if>
+            <if test="condition.ipArea!=null">
+                AND ip_area = #{condition.ipArea}
+            </if>
+            <if test="condition.optRemark!=null">
+                AND opt_remark = #{condition.optRemark}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM uc_member_log
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM uc_member_log WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM uc_member_log
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userId!=null">
+                AND user_id = #{condition.userId}
+            </if>
+            <if test="condition.optType!=null">
+                AND opt_type = #{condition.optType}
+            </if>
+            <if test="condition.optTime!=null">
+                AND opt_time = #{condition.optTime}
+            </if>
+            <if test="condition.ip!=null">
+                AND ip = #{condition.ip}
+            </if>
+            <if test="condition.ipArea!=null">
+                AND ip_area = #{condition.ipArea}
+            </if>
+            <if test="condition.optRemark!=null">
+                AND opt_remark = #{condition.optRemark}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                      
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

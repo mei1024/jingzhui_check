@@ -1,0 +1,35 @@
+apply plugin: 'war'
+dependencies {
+	/** compile local **/
+	compile( 
+	    project(":jingzhui-mb-api"),
+	    project(":jingzhui-mb-domain"),
+	    project(":jingzhui-job-service"),
+	    project(":jingzhui-cms-api"),
+	    project(":jingzhui-cms-service"),
+	    project(":jingzhui-uc-api"),
+	    project(":jingzhui-uc-service"),
+	    project(":jingzhui-bi-api"),
+	    project(":jingzhui-bi-service")
+	)
+	
+    /** solar-common **/
+    compile "com.solar:solar-common-core:${solarCommonVersion}"
+    compile "com.solar:solar-common-service:${solarCommonVersion}"
+    compile "com.solar:solar-common-util:${solarCommonVersion}"
+    
+    /** solar-service **/
+    compile "com.solar:solar-ds-api:${solarDsVersion}"
+	compile "com.solar:solar-ds-service:${solarDsVersion}"
+	compile "com.solar:solar-ds-variable:${solarDsVersion}"		
+
+    compile "com.solar:solar-auth-api:${solarAuthVersion}"
+	compile "com.solar:solar-auth-service:${solarAuthVersion}"	
+    
+    compile "com.solar:solar-mas-api:${solarMasVersion}"
+	compile "com.solar:solar-mas-service:${solarMasVersion}"	
+
+    compile "com.solar:solar-ms-api:${solarMsVersion}"
+	compile "com.solar:solar-ms-service:${solarMsVersion}"
+	
+}

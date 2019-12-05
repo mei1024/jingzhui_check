@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.cms.dal.dao.CmsTagTypeDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        site_id as siteId,
+        name as name,
+        count as count
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="CmsTagType">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_tag_type
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="CmsTagType">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_tag_type
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="CmsTagType">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_tag_type
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.count!=null">
+                AND count = #{condition.count}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="CmsTagType">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_tag_type
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="CmsTagType">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_tag_type
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.count!=null">
+                AND count = #{condition.count}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="CmsTagType">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_tag_type WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="CmsTagType">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_tag_type WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsTagType">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_tag_type
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.count!=null">
+                AND count = #{condition.count}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="CmsTagType">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_tag_type
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.siteId!=null">
+               AND site_id like CONCAT('%', #{condition.siteId} , '%')
+            </if>
+            <if test="condition.name!=null">
+               AND name like CONCAT('%', #{condition.name} , '%')
+            </if>
+            <if test="condition.count!=null">
+               AND count like CONCAT('%', #{condition.count} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_tag_type
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.count!=null">
+                AND count = #{condition.count}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM cms_tag_type
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.count!=null">
+                AND count = #{condition.count}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="CmsTagType" >
+        INSERT INTO cms_tag_type (
+	        id,
+	        site_id,
+	        name,
+	        count
+        ) VALUES (
+	        #{id},
+	        #{siteId},
+	        #{name},
+	        #{count}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list" >
+        INSERT INTO cms_tag_type (
+	        id,
+	        site_id,
+	        name,
+	        count
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.id},
+	        #{item.siteId},
+	        #{item.name},
+	        #{item.count}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="CmsTagType">
+        UPDATE cms_tag_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="siteId != null">
+                site_id = #{siteId},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="count != null">
+                count = #{count},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="CmsTagType">
+        UPDATE cms_tag_type
+        <trim prefix="SET" suffixOverrides=",">
+                site_id = #{siteId},
+                name = #{name},
+                count = #{count},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE cms_tag_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.siteId!=null">
+                site_id = #{update.siteId},
+            </if>
+            <if test="update.name!=null">
+                name = #{update.name},
+            </if>
+            <if test="update.count!=null">
+                count = #{update.count},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.count!=null">
+                AND count = #{condition.count}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM cms_tag_type
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM cms_tag_type WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM cms_tag_type
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.count!=null">
+                AND count = #{condition.count}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

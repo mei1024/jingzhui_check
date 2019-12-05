@@ -1,0 +1,17 @@
+dependencies {
+	/** compile local **/
+	compile( 
+	  project(":jingzhui-cms-api"),
+	  project(":jingzhui-cms-domain")
+	)
+	
+    /** solar-common **/
+    compile "com.solar:solar-common-core:${solarCommonVersion}"
+    compile "com.solar:solar-common-service:${solarCommonVersion}"
+    compile "com.solar:solar-common-util:${solarCommonVersion}"
+	
+    /** solar-service **/
+    compile "com.solar:solar-ds-api:${solarDsVersion}"
+    compile "com.solar:solar-ds-service:${solarDsVersion}"	
+
+}

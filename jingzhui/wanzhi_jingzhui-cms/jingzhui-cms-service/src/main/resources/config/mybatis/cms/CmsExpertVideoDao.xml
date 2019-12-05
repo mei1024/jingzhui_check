@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.cms.dal.dao.CmsExpertVideoDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        expert_id as expertId,
+        video_id as videoId,
+        memo as memo,
+        dstatus as dstatus,
+        creator as creator,
+        create_date as createDate,
+        last_modifier as lastModifier,
+        last_mod_date as lastModDate,
+        version as version
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="CmsExpertVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert_video
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="CmsExpertVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert_video
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="CmsExpertVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.expertId!=null">
+                AND expert_id = #{condition.expertId}
+            </if>
+            <if test="condition.videoId!=null">
+                AND video_id = #{condition.videoId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="CmsExpertVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert_video
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="CmsExpertVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.expertId!=null">
+                AND expert_id = #{condition.expertId}
+            </if>
+            <if test="condition.videoId!=null">
+                AND video_id = #{condition.videoId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="CmsExpertVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert_video WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="CmsExpertVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert_video WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsExpertVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert_video
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.expertId!=null">
+                AND expert_id = #{condition.expertId}
+            </if>
+            <if test="condition.videoId!=null">
+                AND video_id = #{condition.videoId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                       
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="CmsExpertVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_expert_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.expertId!=null">
+               AND expert_id like CONCAT('%', #{condition.expertId} , '%')
+            </if>
+            <if test="condition.videoId!=null">
+               AND video_id like CONCAT('%', #{condition.videoId} , '%')
+            </if>
+            <if test="condition.memo!=null">
+               AND memo like CONCAT('%', #{condition.memo} , '%')
+            </if>
+            <if test="condition.dstatus!=null">
+               AND dstatus like CONCAT('%', #{condition.dstatus} , '%')
+            </if>
+            <if test="condition.creator!=null">
+               AND creator like CONCAT('%', #{condition.creator} , '%')
+            </if>
+            <if test="condition.createDate!=null">
+               AND create_date like CONCAT('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.lastModifier!=null">
+               AND last_modifier like CONCAT('%', #{condition.lastModifier} , '%')
+            </if>
+            <if test="condition.lastModDate!=null">
+               AND last_mod_date like CONCAT('%', #{condition.lastModDate} , '%')
+            </if>
+            <if test="condition.version!=null">
+               AND version like CONCAT('%', #{condition.version} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_expert_video
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.expertId!=null">
+                AND expert_id = #{condition.expertId}
+            </if>
+            <if test="condition.videoId!=null">
+                AND video_id = #{condition.videoId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM cms_expert_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.expertId!=null">
+                AND expert_id = #{condition.expertId}
+            </if>
+            <if test="condition.videoId!=null">
+                AND video_id = #{condition.videoId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="CmsExpertVideo"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cms_expert_video (
+	        expert_id,
+	        video_id,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES (
+	        #{expertId},
+	        #{videoId},
+	        #{memo},
+	        #{dstatus},
+	        #{creator},
+	        #{createDate},
+	        #{lastModifier},
+	        #{lastModDate},
+	        #{version}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cms_expert_video (
+	        expert_id,
+	        video_id,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.expertId},
+	        #{item.videoId},
+	        #{item.memo},
+	        #{item.dstatus},
+	        #{item.creator},
+	        #{item.createDate},
+	        #{item.lastModifier},
+	        #{item.lastModDate},
+	        #{item.version}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="CmsExpertVideo">
+        UPDATE cms_expert_video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="expertId != null">
+                expert_id = #{expertId},
+            </if>
+            <if test="videoId != null">
+                video_id = #{videoId},
+            </if>
+            <if test="memo != null">
+                memo = #{memo},
+            </if>
+            <if test="dstatus != null">
+                dstatus = #{dstatus},
+            </if>
+            <if test="creator != null">
+                creator = #{creator},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="lastModifier != null">
+                last_modifier = #{lastModifier},
+            </if>
+            <if test="lastModDate != null">
+                last_mod_date = #{lastModDate},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="CmsExpertVideo">
+        UPDATE cms_expert_video
+        <trim prefix="SET" suffixOverrides=",">
+                expert_id = #{expertId},
+                video_id = #{videoId},
+                memo = #{memo},
+                dstatus = #{dstatus},
+                creator = #{creator},
+                create_date = #{createDate},
+                last_modifier = #{lastModifier},
+                last_mod_date = #{lastModDate},
+                version = #{version},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE cms_expert_video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.expertId!=null">
+                expert_id = #{update.expertId},
+            </if>
+            <if test="update.videoId!=null">
+                video_id = #{update.videoId},
+            </if>
+            <if test="update.memo!=null">
+                memo = #{update.memo},
+            </if>
+            <if test="update.dstatus!=null">
+                dstatus = #{update.dstatus},
+            </if>
+            <if test="update.creator!=null">
+                creator = #{update.creator},
+            </if>
+            <if test="update.createDate!=null">
+                create_date = #{update.createDate},
+            </if>
+            <if test="update.lastModifier!=null">
+                last_modifier = #{update.lastModifier},
+            </if>
+            <if test="update.lastModDate!=null">
+                last_mod_date = #{update.lastModDate},
+            </if>
+            <if test="update.version!=null">
+                version = #{update.version},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.expertId!=null">
+                AND expert_id = #{condition.expertId}
+            </if>
+            <if test="condition.videoId!=null">
+                AND video_id = #{condition.videoId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM cms_expert_video
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM cms_expert_video WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM cms_expert_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.expertId!=null">
+                AND expert_id = #{condition.expertId}
+            </if>
+            <if test="condition.videoId!=null">
+                AND video_id = #{condition.videoId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                      
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

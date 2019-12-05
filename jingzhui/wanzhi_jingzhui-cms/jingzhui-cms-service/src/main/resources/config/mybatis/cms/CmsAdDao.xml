@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.cms.dal.dao.CmsAdDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        name as name,
+        type as type,
+        content_id as contentId,
+        img_url as imgUrl,
+        link_url as linkUrl,
+        status as status,
+        sortno as sortno,
+        memo as memo,
+        dstatus as dstatus,
+        creator as creator,
+        create_date as createDate,
+        last_modifier as lastModifier,
+        last_mod_date as lastModDate,
+        version as version
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="CmsAd">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_ad
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="CmsAd">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_ad
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="CmsAd">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_ad
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.type!=null">
+                AND type = #{condition.type}
+            </if>
+            <if test="condition.contentId!=null">
+                AND content_id = #{condition.contentId}
+            </if>
+            <if test="condition.imgUrl!=null">
+                AND img_url = #{condition.imgUrl}
+            </if>
+            <if test="condition.linkUrl!=null">
+                AND link_url = #{condition.linkUrl}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="CmsAd">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_ad
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="CmsAd">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_ad
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.type!=null">
+                AND type = #{condition.type}
+            </if>
+            <if test="condition.contentId!=null">
+                AND content_id = #{condition.contentId}
+            </if>
+            <if test="condition.imgUrl!=null">
+                AND img_url = #{condition.imgUrl}
+            </if>
+            <if test="condition.linkUrl!=null">
+                AND link_url = #{condition.linkUrl}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="CmsAd">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_ad WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="CmsAd">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_ad WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsAd">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_ad
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.type!=null">
+                AND type = #{condition.type}
+            </if>
+            <if test="condition.contentId!=null">
+                AND content_id = #{condition.contentId}
+            </if>
+            <if test="condition.imgUrl!=null">
+                AND img_url = #{condition.imgUrl}
+            </if>
+            <if test="condition.linkUrl!=null">
+                AND link_url = #{condition.linkUrl}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                       
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="CmsAd">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_ad
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.name!=null">
+               AND name like CONCAT('%', #{condition.name} , '%')
+            </if>
+            <if test="condition.type!=null">
+               AND type like CONCAT('%', #{condition.type} , '%')
+            </if>
+            <if test="condition.contentId!=null">
+               AND content_id like CONCAT('%', #{condition.contentId} , '%')
+            </if>
+            <if test="condition.imgUrl!=null">
+               AND img_url like CONCAT('%', #{condition.imgUrl} , '%')
+            </if>
+            <if test="condition.linkUrl!=null">
+               AND link_url like CONCAT('%', #{condition.linkUrl} , '%')
+            </if>
+            <if test="condition.status!=null">
+               AND status like CONCAT('%', #{condition.status} , '%')
+            </if>
+            <if test="condition.sortno!=null">
+               AND sortno like CONCAT('%', #{condition.sortno} , '%')
+            </if>
+            <if test="condition.memo!=null">
+               AND memo like CONCAT('%', #{condition.memo} , '%')
+            </if>
+            <if test="condition.dstatus!=null">
+               AND dstatus like CONCAT('%', #{condition.dstatus} , '%')
+            </if>
+            <if test="condition.creator!=null">
+               AND creator like CONCAT('%', #{condition.creator} , '%')
+            </if>
+            <if test="condition.createDate!=null">
+               AND create_date like CONCAT('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.lastModifier!=null">
+               AND last_modifier like CONCAT('%', #{condition.lastModifier} , '%')
+            </if>
+            <if test="condition.lastModDate!=null">
+               AND last_mod_date like CONCAT('%', #{condition.lastModDate} , '%')
+            </if>
+            <if test="condition.version!=null">
+               AND version like CONCAT('%', #{condition.version} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_ad
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.type!=null">
+                AND type = #{condition.type}
+            </if>
+            <if test="condition.contentId!=null">
+                AND content_id = #{condition.contentId}
+            </if>
+            <if test="condition.imgUrl!=null">
+                AND img_url = #{condition.imgUrl}
+            </if>
+            <if test="condition.linkUrl!=null">
+                AND link_url = #{condition.linkUrl}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM cms_ad
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.type!=null">
+                AND type = #{condition.type}
+            </if>
+            <if test="condition.contentId!=null">
+                AND content_id = #{condition.contentId}
+            </if>
+            <if test="condition.imgUrl!=null">
+                AND img_url = #{condition.imgUrl}
+            </if>
+            <if test="condition.linkUrl!=null">
+                AND link_url = #{condition.linkUrl}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="CmsAd"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cms_ad (
+	        name,
+	        type,
+	        content_id,
+	        img_url,
+	        link_url,
+	        status,
+	        sortno,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES (
+	        #{name},
+	        #{type},
+	        #{contentId},
+	        #{imgUrl},
+	        #{linkUrl},
+	        #{status},
+	        #{sortno},
+	        #{memo},
+	        #{dstatus},
+	        #{creator},
+	        #{createDate},
+	        #{lastModifier},
+	        #{lastModDate},
+	        #{version}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cms_ad (
+	        name,
+	        type,
+	        content_id,
+	        img_url,
+	        link_url,
+	        status,
+	        sortno,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.name},
+	        #{item.type},
+	        #{item.contentId},
+	        #{item.imgUrl},
+	        #{item.linkUrl},
+	        #{item.status},
+	        #{item.sortno},
+	        #{item.memo},
+	        #{item.dstatus},
+	        #{item.creator},
+	        #{item.createDate},
+	        #{item.lastModifier},
+	        #{item.lastModDate},
+	        #{item.version}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="CmsAd">
+        UPDATE cms_ad
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="contentId != null">
+                content_id = #{contentId},
+            </if>
+            <if test="imgUrl != null">
+                img_url = #{imgUrl},
+            </if>
+            <if test="linkUrl != null">
+                link_url = #{linkUrl},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="sortno != null">
+                sortno = #{sortno},
+            </if>
+            <if test="memo != null">
+                memo = #{memo},
+            </if>
+            <if test="dstatus != null">
+                dstatus = #{dstatus},
+            </if>
+            <if test="creator != null">
+                creator = #{creator},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="lastModifier != null">
+                last_modifier = #{lastModifier},
+            </if>
+            <if test="lastModDate != null">
+                last_mod_date = #{lastModDate},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="CmsAd">
+        UPDATE cms_ad
+        <trim prefix="SET" suffixOverrides=",">
+                name = #{name},
+                type = #{type},
+                content_id = #{contentId},
+                img_url = #{imgUrl},
+                link_url = #{linkUrl},
+                status = #{status},
+                sortno = #{sortno},
+                memo = #{memo},
+                dstatus = #{dstatus},
+                creator = #{creator},
+                create_date = #{createDate},
+                last_modifier = #{lastModifier},
+                last_mod_date = #{lastModDate},
+                version = #{version},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE cms_ad
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.name!=null">
+                name = #{update.name},
+            </if>
+            <if test="update.type!=null">
+                type = #{update.type},
+            </if>
+            <if test="update.contentId!=null">
+                content_id = #{update.contentId},
+            </if>
+            <if test="update.imgUrl!=null">
+                img_url = #{update.imgUrl},
+            </if>
+            <if test="update.linkUrl!=null">
+                link_url = #{update.linkUrl},
+            </if>
+            <if test="update.status!=null">
+                status = #{update.status},
+            </if>
+            <if test="update.sortno!=null">
+                sortno = #{update.sortno},
+            </if>
+            <if test="update.memo!=null">
+                memo = #{update.memo},
+            </if>
+            <if test="update.dstatus!=null">
+                dstatus = #{update.dstatus},
+            </if>
+            <if test="update.creator!=null">
+                creator = #{update.creator},
+            </if>
+            <if test="update.createDate!=null">
+                create_date = #{update.createDate},
+            </if>
+            <if test="update.lastModifier!=null">
+                last_modifier = #{update.lastModifier},
+            </if>
+            <if test="update.lastModDate!=null">
+                last_mod_date = #{update.lastModDate},
+            </if>
+            <if test="update.version!=null">
+                version = #{update.version},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.type!=null">
+                AND type = #{condition.type}
+            </if>
+            <if test="condition.contentId!=null">
+                AND content_id = #{condition.contentId}
+            </if>
+            <if test="condition.imgUrl!=null">
+                AND img_url = #{condition.imgUrl}
+            </if>
+            <if test="condition.linkUrl!=null">
+                AND link_url = #{condition.linkUrl}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM cms_ad
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM cms_ad WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM cms_ad
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.type!=null">
+                AND type = #{condition.type}
+            </if>
+            <if test="condition.contentId!=null">
+                AND content_id = #{condition.contentId}
+            </if>
+            <if test="condition.imgUrl!=null">
+                AND img_url = #{condition.imgUrl}
+            </if>
+            <if test="condition.linkUrl!=null">
+                AND link_url = #{condition.linkUrl}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                      
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solar.cms.dal.dao.ext.CmsVideoExtDao">
+
+  
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsVideo">
+        SELECT
+	        a.id as id,
+	        a.cover_url as coverUrl,
+	        a.origin_url as originUrl,
+	        a.url240 as url240,
+	        a.url480 as url480,
+	        a.url780 as url780,
+	        a.url1080 as url1080,
+	        a.token240 as token240,
+	        a.token480 as token480,
+	        a.token780 as token780,
+	        a.token1080 as token1080,
+	        a.key240 as key240,
+	        a.key480 as key480,
+	        a.key780 as key780,
+	        a.key1080 as key1080,
+	        a.vstatus as vstatus,
+	        a.vkey as vkey,
+	        a.vavthumb_task_id as vavthumbTaskId,
+	        a.vavthumb_status as vavthumbStatus,
+	        a.vsample_task_id as vsampleTaskId,
+	        a.vsample_status as vsampleStatus,
+	        a.upload_ip as uploadIp,
+	        a.upload_time as uploadTime,
+	        a.size as size,
+	        a.length as length,
+	        b.sortno,
+	        b.check_date,
+	        b.publish_date	        
+        FROM 
+        	cms_video a 
+        INNER JOIN cms_content b ON a.id=b.id
+        <if test="condition.expertId!=null">
+            INNER JOIN cms_expert_video c ON a.id=c.videoId
+        </if>
+       
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+	        <if test="condition.expertId!=null">
+	            AND c.expert_id = #{condition.expertId}
+	        </if>
+            <if test="condition.id!=null">
+                AND a.id = #{condition.id}
+            </if>
+            <if test="condition.keyword!=null">
+                AND CONCAT( IFNULL(b.title,''), IFNULL(b.description,'')  ) LIKE CONCAT('%', #{condition.keyword} , '%')
+            </if> 
+            <if test="condition.tagId!=null">
+                AND b.tag_ids LIKE CONCAT('%', #{condition.tagId} , '%')
+            </if>
+            <if test="condition.categoryId!=null">
+                AND b.category_id = #{condition.categoryId}
+            </if>
+            <if test="condition.status!=null">
+                AND b.status = #{condition.status}
+            </if>
+            <if test="condition.vstatus!=null">
+                AND a.vstatus = #{condition.vstatus}
+            </if>  
+             <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND b.create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>  
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+   
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM 
+        	cms_video a
+        INNER JOIN cms_content b ON a.id=b.id
+        <if test="condition.expertId!=null">
+            INNER JOIN cms_expert_video c ON a.id=c.videoId
+        </if>
+        
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+	        <if test="condition.expertId!=null">
+	            AND c.expert_id = #{condition.expertId}
+	        </if>
+            <if test="condition.id!=null">
+                AND a.id = #{condition.id}
+            </if>
+            <if test="condition.keyword!=null">
+                AND CONCAT( IFNULL(b.title,''), IFNULL(b.description,'')  ) LIKE CONCAT('%', #{condition.keyword} , '%')
+            </if> 
+            <if test="condition.tagId!=null">
+                AND b.tag_ids LIKE CONCAT('%', #{condition.tagId} , '%')
+            </if>
+            <if test="condition.categoryId!=null">
+                AND b.category_id = #{condition.categoryId}
+            </if>
+            <if test="condition.status!=null">
+                AND b.status = #{condition.status}
+            </if>
+            <if test="condition.vstatus!=null">
+                AND a.vstatus = #{condition.vstatus}
+            </if>  
+             <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND b.create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>  
+        </trim>
+   </select>
+
+</mapper>

@@ -1,0 +1,92 @@
+package com.solar.job.web.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nebula.common.util.Pagination;
+import com.nebula.common.web.http.protocol.Response;
+import com.nebula.common.web.http.protocol.Responses;
+import com.solar.job.dto.JobCronTimerDto;
+import com.solar.job.query.JobCronTimerQuery;
+import com.solar.job.service.JobCronTimerService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+@Api(value = "[JOB]任务定时器", tags = { "JOB" })
+@RestController
+@RequestMapping("/timer/cron")
+public class JobCronTimerController {
+	
+	@Autowired
+	private JobCronTimerService jobCronTimerService;
+	
+	@ApiOperation(value = "任务定时器查询", httpMethod = "GET", notes = "")
+	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Response<Pagination<JobCronTimerDto>> list(
+			@ApiParam(name = "keyword", value = "关键字", required = false) @RequestParam(value = "keyword", required = false) String keyword,
+			@ApiParam(name = "sortby", value = "指定返回结果按照哪个属性排序", required = false) @RequestParam(value = "sortby", required = false) String sortby,
+			@ApiParam(name = "order", value = "排序顺序 desc asc", required = false) @RequestParam(value = "order", required = false) String order,
+			@ApiParam(name = "num", value = "当前页数", required = false) @RequestParam(value = "num", required = false, defaultValue = "1") int num,
+			@ApiParam(name = "size", value = "指定返回记录的数量,默认15", required = false) @RequestParam(value = "size", required = false, defaultValue = "15") int pageSize) {
+
+		JobCronTimerQuery query = new JobCronTimerQuery();
+		query.setKeyword(keyword);
+		query.setOrder(order);
+		query.setSortby(sortby);
+		query.setCount(pageSize);
+		query.setPage(num);
+		
+		Pagination<JobCronTimerDto> pagination = jobCronTimerService.queryPageJobCronTimer(query);
+
+		return Responses.newOK(pagination);
+	}
+
+	@ApiOperation(value = "任务定时器创建", httpMethod = "POST", notes = "")
+	@RequestMapping(value = "", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Response<JobCronTimerDto> create(
+			@RequestBody @ApiParam(name = "任务定时器创建对象", required = true) JobCronTimerDto jobCronTimer) {
+		JobCronTimerDto result = jobCronTimerService.saveJobCronTimer(jobCronTimer);
+		return Responses.newOK(result);
+	}
+	
+	@ApiOperation(value = "任务定时器删除", httpMethod = "DELETE", notes = "")
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Response<String> delete(
+			@ApiParam(name = "id", value = "ID编号", required = true) @PathVariable(value = "id", required = true) String id) {
+		
+		jobCronTimerService.deleteJobCronTimerById(id);
+		
+		return Responses.newOK();
+	}
+	
+	@ApiOperation(value = "任务定时器修改", httpMethod = "PUT", notes = "")
+	@RequestMapping(value = "{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Response<String> update(
+			@ApiParam(name = "id", value = "ID编号", required = true) @PathVariable(value = "id", required = true) String id,
+			@RequestBody @ApiParam(name = "任务定时器修改对象", required = true) JobCronTimerDto jobCronTimer) {
+		
+		jobCronTimer.setId(id);
+		jobCronTimerService.updateJobCronTimerById(jobCronTimer);
+		
+		return Responses.newOK();
+	}
+	
+	@ApiOperation(value = "任务定时器信息", httpMethod = "GET", notes = "")
+	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Response<JobCronTimerDto> get(
+			@ApiParam(name = "id", value = "ID编号", required = true) @PathVariable(value = "id", required = true) String id) {
+		
+		JobCronTimerDto result = jobCronTimerService.queryJobCronTimerById(id);
+		
+		return Responses.newOK(result);
+	}
+	
+}

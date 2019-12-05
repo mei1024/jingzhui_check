@@ -1,0 +1,1007 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.job.dal.dao.JobOnceTimerDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        job_name as jobName,
+        job_group as jobGroup,
+        job_data as jobData,
+        proc as proc,
+        status as status,
+        next_exe_time as nextExeTime,
+        last_exe_start_time as lastExeStartTime,
+        last_exe_end_time as lastExeEndTime,
+        exe_start_time as exeStartTime,
+        exe_end_time as exeEndTime,
+        exe_count as exeCount,
+        retry_max_attempts as retryMaxAttempts,
+        retry_max_interval as retryMaxInterval,
+        result as result,
+        memo as memo,
+        dstatus as dstatus,
+        creator as creator,
+        create_date as createDate,
+        last_modifier as lastModifier,
+        last_mod_date as lastModDate,
+        version as version
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.jobName!=null">
+                AND job_name = #{condition.jobName}
+            </if>
+            <if test="condition.jobGroup!=null">
+                AND job_group = #{condition.jobGroup}
+            </if>
+            <if test="condition.jobData!=null">
+                AND job_data = #{condition.jobData}
+            </if>
+            <if test="condition.proc!=null">
+                AND proc = #{condition.proc}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.nextExeTime!=null">
+                AND next_exe_time = #{condition.nextExeTime}
+            </if>
+            <if test="condition.lastExeStartTime!=null">
+                AND last_exe_start_time = #{condition.lastExeStartTime}
+            </if>
+            <if test="condition.lastExeEndTime!=null">
+                AND last_exe_end_time = #{condition.lastExeEndTime}
+            </if>
+            <if test="condition.exeStartTime!=null">
+                AND exe_start_time = #{condition.exeStartTime}
+            </if>
+            <if test="condition.exeEndTime!=null">
+                AND exe_end_time = #{condition.exeEndTime}
+            </if>
+            <if test="condition.exeCount!=null">
+                AND exe_count = #{condition.exeCount}
+            </if>
+            <if test="condition.retryMaxAttempts!=null">
+                AND retry_max_attempts = #{condition.retryMaxAttempts}
+            </if>
+            <if test="condition.retryMaxInterval!=null">
+                AND retry_max_interval = #{condition.retryMaxInterval}
+            </if>
+            <if test="condition.result!=null">
+                AND result = #{condition.result}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.jobName!=null">
+                AND job_name = #{condition.jobName}
+            </if>
+            <if test="condition.jobGroup!=null">
+                AND job_group = #{condition.jobGroup}
+            </if>
+            <if test="condition.jobData!=null">
+                AND job_data = #{condition.jobData}
+            </if>
+            <if test="condition.proc!=null">
+                AND proc = #{condition.proc}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.nextExeTime!=null">
+                AND next_exe_time = #{condition.nextExeTime}
+            </if>
+            <if test="condition.lastExeStartTime!=null">
+                AND last_exe_start_time = #{condition.lastExeStartTime}
+            </if>
+            <if test="condition.lastExeEndTime!=null">
+                AND last_exe_end_time = #{condition.lastExeEndTime}
+            </if>
+            <if test="condition.exeStartTime!=null">
+                AND exe_start_time = #{condition.exeStartTime}
+            </if>
+            <if test="condition.exeEndTime!=null">
+                AND exe_end_time = #{condition.exeEndTime}
+            </if>
+            <if test="condition.exeCount!=null">
+                AND exe_count = #{condition.exeCount}
+            </if>
+            <if test="condition.retryMaxAttempts!=null">
+                AND retry_max_attempts = #{condition.retryMaxAttempts}
+            </if>
+            <if test="condition.retryMaxInterval!=null">
+                AND retry_max_interval = #{condition.retryMaxInterval}
+            </if>
+            <if test="condition.result!=null">
+                AND result = #{condition.result}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.jobName!=null">
+                AND job_name = #{condition.jobName}
+            </if>
+            <if test="condition.jobGroup!=null">
+                AND job_group = #{condition.jobGroup}
+            </if>
+            <if test="condition.jobData!=null">
+                AND job_data = #{condition.jobData}
+            </if>
+            <if test="condition.proc!=null">
+                AND proc = #{condition.proc}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.nextExeTime!=null">
+                AND next_exe_time = #{condition.nextExeTime}
+            </if>
+            <if test="condition.lastExeStartTime!=null">
+                AND last_exe_start_time = #{condition.lastExeStartTime}
+            </if>
+            <if test="condition.lastExeEndTime!=null">
+                AND last_exe_end_time = #{condition.lastExeEndTime}
+            </if>
+            <if test="condition.exeStartTime!=null">
+                AND exe_start_time = #{condition.exeStartTime}
+            </if>
+            <if test="condition.exeEndTime!=null">
+                AND exe_end_time = #{condition.exeEndTime}
+            </if>
+            <if test="condition.exeCount!=null">
+                AND exe_count = #{condition.exeCount}
+            </if>
+            <if test="condition.retryMaxAttempts!=null">
+                AND retry_max_attempts = #{condition.retryMaxAttempts}
+            </if>
+            <if test="condition.retryMaxInterval!=null">
+                AND retry_max_interval = #{condition.retryMaxInterval}
+            </if>
+            <if test="condition.result!=null">
+                AND result = #{condition.result}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                       
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.jobName!=null">
+               AND job_name like CONCAT('%', #{condition.jobName} , '%')
+            </if>
+            <if test="condition.jobGroup!=null">
+               AND job_group like CONCAT('%', #{condition.jobGroup} , '%')
+            </if>
+            <if test="condition.jobData!=null">
+               AND job_data like CONCAT('%', #{condition.jobData} , '%')
+            </if>
+            <if test="condition.proc!=null">
+               AND proc like CONCAT('%', #{condition.proc} , '%')
+            </if>
+            <if test="condition.status!=null">
+               AND status like CONCAT('%', #{condition.status} , '%')
+            </if>
+            <if test="condition.nextExeTime!=null">
+               AND next_exe_time like CONCAT('%', #{condition.nextExeTime} , '%')
+            </if>
+            <if test="condition.lastExeStartTime!=null">
+               AND last_exe_start_time like CONCAT('%', #{condition.lastExeStartTime} , '%')
+            </if>
+            <if test="condition.lastExeEndTime!=null">
+               AND last_exe_end_time like CONCAT('%', #{condition.lastExeEndTime} , '%')
+            </if>
+            <if test="condition.exeStartTime!=null">
+               AND exe_start_time like CONCAT('%', #{condition.exeStartTime} , '%')
+            </if>
+            <if test="condition.exeEndTime!=null">
+               AND exe_end_time like CONCAT('%', #{condition.exeEndTime} , '%')
+            </if>
+            <if test="condition.exeCount!=null">
+               AND exe_count like CONCAT('%', #{condition.exeCount} , '%')
+            </if>
+            <if test="condition.retryMaxAttempts!=null">
+               AND retry_max_attempts like CONCAT('%', #{condition.retryMaxAttempts} , '%')
+            </if>
+            <if test="condition.retryMaxInterval!=null">
+               AND retry_max_interval like CONCAT('%', #{condition.retryMaxInterval} , '%')
+            </if>
+            <if test="condition.result!=null">
+               AND result like CONCAT('%', #{condition.result} , '%')
+            </if>
+            <if test="condition.memo!=null">
+               AND memo like CONCAT('%', #{condition.memo} , '%')
+            </if>
+            <if test="condition.dstatus!=null">
+               AND dstatus like CONCAT('%', #{condition.dstatus} , '%')
+            </if>
+            <if test="condition.creator!=null">
+               AND creator like CONCAT('%', #{condition.creator} , '%')
+            </if>
+            <if test="condition.createDate!=null">
+               AND create_date like CONCAT('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.lastModifier!=null">
+               AND last_modifier like CONCAT('%', #{condition.lastModifier} , '%')
+            </if>
+            <if test="condition.lastModDate!=null">
+               AND last_mod_date like CONCAT('%', #{condition.lastModDate} , '%')
+            </if>
+            <if test="condition.version!=null">
+               AND version like CONCAT('%', #{condition.version} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM job_once_timer
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.jobName!=null">
+                AND job_name = #{condition.jobName}
+            </if>
+            <if test="condition.jobGroup!=null">
+                AND job_group = #{condition.jobGroup}
+            </if>
+            <if test="condition.jobData!=null">
+                AND job_data = #{condition.jobData}
+            </if>
+            <if test="condition.proc!=null">
+                AND proc = #{condition.proc}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.nextExeTime!=null">
+                AND next_exe_time = #{condition.nextExeTime}
+            </if>
+            <if test="condition.lastExeStartTime!=null">
+                AND last_exe_start_time = #{condition.lastExeStartTime}
+            </if>
+            <if test="condition.lastExeEndTime!=null">
+                AND last_exe_end_time = #{condition.lastExeEndTime}
+            </if>
+            <if test="condition.exeStartTime!=null">
+                AND exe_start_time = #{condition.exeStartTime}
+            </if>
+            <if test="condition.exeEndTime!=null">
+                AND exe_end_time = #{condition.exeEndTime}
+            </if>
+            <if test="condition.exeCount!=null">
+                AND exe_count = #{condition.exeCount}
+            </if>
+            <if test="condition.retryMaxAttempts!=null">
+                AND retry_max_attempts = #{condition.retryMaxAttempts}
+            </if>
+            <if test="condition.retryMaxInterval!=null">
+                AND retry_max_interval = #{condition.retryMaxInterval}
+            </if>
+            <if test="condition.result!=null">
+                AND result = #{condition.result}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM job_once_timer
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.jobName!=null">
+                AND job_name = #{condition.jobName}
+            </if>
+            <if test="condition.jobGroup!=null">
+                AND job_group = #{condition.jobGroup}
+            </if>
+            <if test="condition.jobData!=null">
+                AND job_data = #{condition.jobData}
+            </if>
+            <if test="condition.proc!=null">
+                AND proc = #{condition.proc}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.nextExeTime!=null">
+                AND next_exe_time = #{condition.nextExeTime}
+            </if>
+            <if test="condition.lastExeStartTime!=null">
+                AND last_exe_start_time = #{condition.lastExeStartTime}
+            </if>
+            <if test="condition.lastExeEndTime!=null">
+                AND last_exe_end_time = #{condition.lastExeEndTime}
+            </if>
+            <if test="condition.exeStartTime!=null">
+                AND exe_start_time = #{condition.exeStartTime}
+            </if>
+            <if test="condition.exeEndTime!=null">
+                AND exe_end_time = #{condition.exeEndTime}
+            </if>
+            <if test="condition.exeCount!=null">
+                AND exe_count = #{condition.exeCount}
+            </if>
+            <if test="condition.retryMaxAttempts!=null">
+                AND retry_max_attempts = #{condition.retryMaxAttempts}
+            </if>
+            <if test="condition.retryMaxInterval!=null">
+                AND retry_max_interval = #{condition.retryMaxInterval}
+            </if>
+            <if test="condition.result!=null">
+                AND result = #{condition.result}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="JobOnceTimer"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO job_once_timer (
+	        job_name,
+	        job_group,
+	        job_data,
+	        proc,
+	        status,
+	        next_exe_time,
+	        last_exe_start_time,
+	        last_exe_end_time,
+	        exe_start_time,
+	        exe_end_time,
+	        exe_count,
+	        retry_max_attempts,
+	        retry_max_interval,
+	        result,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES (
+	        #{jobName},
+	        #{jobGroup},
+	        #{jobData},
+	        #{proc},
+	        #{status},
+	        #{nextExeTime},
+	        #{lastExeStartTime},
+	        #{lastExeEndTime},
+	        #{exeStartTime},
+	        #{exeEndTime},
+	        #{exeCount},
+	        #{retryMaxAttempts},
+	        #{retryMaxInterval},
+	        #{result},
+	        #{memo},
+	        #{dstatus},
+	        #{creator},
+	        #{createDate},
+	        #{lastModifier},
+	        #{lastModDate},
+	        #{version}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list"  useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO job_once_timer (
+	        job_name,
+	        job_group,
+	        job_data,
+	        proc,
+	        status,
+	        next_exe_time,
+	        last_exe_start_time,
+	        last_exe_end_time,
+	        exe_start_time,
+	        exe_end_time,
+	        exe_count,
+	        retry_max_attempts,
+	        retry_max_interval,
+	        result,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.jobName},
+	        #{item.jobGroup},
+	        #{item.jobData},
+	        #{item.proc},
+	        #{item.status},
+	        #{item.nextExeTime},
+	        #{item.lastExeStartTime},
+	        #{item.lastExeEndTime},
+	        #{item.exeStartTime},
+	        #{item.exeEndTime},
+	        #{item.exeCount},
+	        #{item.retryMaxAttempts},
+	        #{item.retryMaxInterval},
+	        #{item.result},
+	        #{item.memo},
+	        #{item.dstatus},
+	        #{item.creator},
+	        #{item.createDate},
+	        #{item.lastModifier},
+	        #{item.lastModDate},
+	        #{item.version}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="JobOnceTimer">
+        UPDATE job_once_timer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="jobName != null">
+                job_name = #{jobName},
+            </if>
+            <if test="jobGroup != null">
+                job_group = #{jobGroup},
+            </if>
+            <if test="jobData != null">
+                job_data = #{jobData},
+            </if>
+            <if test="proc != null">
+                proc = #{proc},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="nextExeTime != null">
+                next_exe_time = #{nextExeTime},
+            </if>
+            <if test="lastExeStartTime != null">
+                last_exe_start_time = #{lastExeStartTime},
+            </if>
+            <if test="lastExeEndTime != null">
+                last_exe_end_time = #{lastExeEndTime},
+            </if>
+            <if test="exeStartTime != null">
+                exe_start_time = #{exeStartTime},
+            </if>
+            <if test="exeEndTime != null">
+                exe_end_time = #{exeEndTime},
+            </if>
+            <if test="exeCount != null">
+                exe_count = #{exeCount},
+            </if>
+            <if test="retryMaxAttempts != null">
+                retry_max_attempts = #{retryMaxAttempts},
+            </if>
+            <if test="retryMaxInterval != null">
+                retry_max_interval = #{retryMaxInterval},
+            </if>
+            <if test="result != null">
+                result = #{result},
+            </if>
+            <if test="memo != null">
+                memo = #{memo},
+            </if>
+            <if test="dstatus != null">
+                dstatus = #{dstatus},
+            </if>
+            <if test="creator != null">
+                creator = #{creator},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="lastModifier != null">
+                last_modifier = #{lastModifier},
+            </if>
+            <if test="lastModDate != null">
+                last_mod_date = #{lastModDate},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="JobOnceTimer">
+        UPDATE job_once_timer
+        <trim prefix="SET" suffixOverrides=",">
+                job_name = #{jobName},
+                job_group = #{jobGroup},
+                job_data = #{jobData},
+                proc = #{proc},
+                status = #{status},
+                next_exe_time = #{nextExeTime},
+                last_exe_start_time = #{lastExeStartTime},
+                last_exe_end_time = #{lastExeEndTime},
+                exe_start_time = #{exeStartTime},
+                exe_end_time = #{exeEndTime},
+                exe_count = #{exeCount},
+                retry_max_attempts = #{retryMaxAttempts},
+                retry_max_interval = #{retryMaxInterval},
+                result = #{result},
+                memo = #{memo},
+                dstatus = #{dstatus},
+                creator = #{creator},
+                create_date = #{createDate},
+                last_modifier = #{lastModifier},
+                last_mod_date = #{lastModDate},
+                version = #{version},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE job_once_timer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.jobName!=null">
+                job_name = #{update.jobName},
+            </if>
+            <if test="update.jobGroup!=null">
+                job_group = #{update.jobGroup},
+            </if>
+            <if test="update.jobData!=null">
+                job_data = #{update.jobData},
+            </if>
+            <if test="update.proc!=null">
+                proc = #{update.proc},
+            </if>
+            <if test="update.status!=null">
+                status = #{update.status},
+            </if>
+            <if test="update.nextExeTime!=null">
+                next_exe_time = #{update.nextExeTime},
+            </if>
+            <if test="update.lastExeStartTime!=null">
+                last_exe_start_time = #{update.lastExeStartTime},
+            </if>
+            <if test="update.lastExeEndTime!=null">
+                last_exe_end_time = #{update.lastExeEndTime},
+            </if>
+            <if test="update.exeStartTime!=null">
+                exe_start_time = #{update.exeStartTime},
+            </if>
+            <if test="update.exeEndTime!=null">
+                exe_end_time = #{update.exeEndTime},
+            </if>
+            <if test="update.exeCount!=null">
+                exe_count = #{update.exeCount},
+            </if>
+            <if test="update.retryMaxAttempts!=null">
+                retry_max_attempts = #{update.retryMaxAttempts},
+            </if>
+            <if test="update.retryMaxInterval!=null">
+                retry_max_interval = #{update.retryMaxInterval},
+            </if>
+            <if test="update.result!=null">
+                result = #{update.result},
+            </if>
+            <if test="update.memo!=null">
+                memo = #{update.memo},
+            </if>
+            <if test="update.dstatus!=null">
+                dstatus = #{update.dstatus},
+            </if>
+            <if test="update.creator!=null">
+                creator = #{update.creator},
+            </if>
+            <if test="update.createDate!=null">
+                create_date = #{update.createDate},
+            </if>
+            <if test="update.lastModifier!=null">
+                last_modifier = #{update.lastModifier},
+            </if>
+            <if test="update.lastModDate!=null">
+                last_mod_date = #{update.lastModDate},
+            </if>
+            <if test="update.version!=null">
+                version = #{update.version},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.jobName!=null">
+                AND job_name = #{condition.jobName}
+            </if>
+            <if test="condition.jobGroup!=null">
+                AND job_group = #{condition.jobGroup}
+            </if>
+            <if test="condition.jobData!=null">
+                AND job_data = #{condition.jobData}
+            </if>
+            <if test="condition.proc!=null">
+                AND proc = #{condition.proc}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.nextExeTime!=null">
+                AND next_exe_time = #{condition.nextExeTime}
+            </if>
+            <if test="condition.lastExeStartTime!=null">
+                AND last_exe_start_time = #{condition.lastExeStartTime}
+            </if>
+            <if test="condition.lastExeEndTime!=null">
+                AND last_exe_end_time = #{condition.lastExeEndTime}
+            </if>
+            <if test="condition.exeStartTime!=null">
+                AND exe_start_time = #{condition.exeStartTime}
+            </if>
+            <if test="condition.exeEndTime!=null">
+                AND exe_end_time = #{condition.exeEndTime}
+            </if>
+            <if test="condition.exeCount!=null">
+                AND exe_count = #{condition.exeCount}
+            </if>
+            <if test="condition.retryMaxAttempts!=null">
+                AND retry_max_attempts = #{condition.retryMaxAttempts}
+            </if>
+            <if test="condition.retryMaxInterval!=null">
+                AND retry_max_interval = #{condition.retryMaxInterval}
+            </if>
+            <if test="condition.result!=null">
+                AND result = #{condition.result}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM job_once_timer
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM job_once_timer WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM job_once_timer
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.jobName!=null">
+                AND job_name = #{condition.jobName}
+            </if>
+            <if test="condition.jobGroup!=null">
+                AND job_group = #{condition.jobGroup}
+            </if>
+            <if test="condition.jobData!=null">
+                AND job_data = #{condition.jobData}
+            </if>
+            <if test="condition.proc!=null">
+                AND proc = #{condition.proc}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.nextExeTime!=null">
+                AND next_exe_time = #{condition.nextExeTime}
+            </if>
+            <if test="condition.lastExeStartTime!=null">
+                AND last_exe_start_time = #{condition.lastExeStartTime}
+            </if>
+            <if test="condition.lastExeEndTime!=null">
+                AND last_exe_end_time = #{condition.lastExeEndTime}
+            </if>
+            <if test="condition.exeStartTime!=null">
+                AND exe_start_time = #{condition.exeStartTime}
+            </if>
+            <if test="condition.exeEndTime!=null">
+                AND exe_end_time = #{condition.exeEndTime}
+            </if>
+            <if test="condition.exeCount!=null">
+                AND exe_count = #{condition.exeCount}
+            </if>
+            <if test="condition.retryMaxAttempts!=null">
+                AND retry_max_attempts = #{condition.retryMaxAttempts}
+            </if>
+            <if test="condition.retryMaxInterval!=null">
+                AND retry_max_interval = #{condition.retryMaxInterval}
+            </if>
+            <if test="condition.result!=null">
+                AND result = #{condition.result}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                      
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.cms.dal.dao.CmsNewsDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        province_id as provinceId,
+        city_id as cityId,
+        district_id as districtId,
+        villages_id as villagesId,
+        hamlet_id as hamletId
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="CmsNews">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_news
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="CmsNews">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_news
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="CmsNews">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_news
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.villagesId!=null">
+                AND villages_id = #{condition.villagesId}
+            </if>
+            <if test="condition.hamletId!=null">
+                AND hamlet_id = #{condition.hamletId}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="CmsNews">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_news
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="CmsNews">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_news
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.villagesId!=null">
+                AND villages_id = #{condition.villagesId}
+            </if>
+            <if test="condition.hamletId!=null">
+                AND hamlet_id = #{condition.hamletId}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="CmsNews">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_news WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="CmsNews">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_news WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsNews">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_news
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.villagesId!=null">
+                AND villages_id = #{condition.villagesId}
+            </if>
+            <if test="condition.hamletId!=null">
+                AND hamlet_id = #{condition.hamletId}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="CmsNews">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_news
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.provinceId!=null">
+               AND province_id like CONCAT('%', #{condition.provinceId} , '%')
+            </if>
+            <if test="condition.cityId!=null">
+               AND city_id like CONCAT('%', #{condition.cityId} , '%')
+            </if>
+            <if test="condition.districtId!=null">
+               AND district_id like CONCAT('%', #{condition.districtId} , '%')
+            </if>
+            <if test="condition.villagesId!=null">
+               AND villages_id like CONCAT('%', #{condition.villagesId} , '%')
+            </if>
+            <if test="condition.hamletId!=null">
+               AND hamlet_id like CONCAT('%', #{condition.hamletId} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_news
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.villagesId!=null">
+                AND villages_id = #{condition.villagesId}
+            </if>
+            <if test="condition.hamletId!=null">
+                AND hamlet_id = #{condition.hamletId}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM cms_news
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.villagesId!=null">
+                AND villages_id = #{condition.villagesId}
+            </if>
+            <if test="condition.hamletId!=null">
+                AND hamlet_id = #{condition.hamletId}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="CmsNews" >
+        INSERT INTO cms_news (
+	        id,
+	        province_id,
+	        city_id,
+	        district_id,
+	        villages_id,
+	        hamlet_id
+        ) VALUES (
+	        #{id},
+	        #{provinceId},
+	        #{cityId},
+	        #{districtId},
+	        #{villagesId},
+	        #{hamletId}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list" >
+        INSERT INTO cms_news (
+	        id,
+	        province_id,
+	        city_id,
+	        district_id,
+	        villages_id,
+	        hamlet_id
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.id},
+	        #{item.provinceId},
+	        #{item.cityId},
+	        #{item.districtId},
+	        #{item.villagesId},
+	        #{item.hamletId}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="CmsNews">
+        UPDATE cms_news
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="provinceId != null">
+                province_id = #{provinceId},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId},
+            </if>
+            <if test="districtId != null">
+                district_id = #{districtId},
+            </if>
+            <if test="villagesId != null">
+                villages_id = #{villagesId},
+            </if>
+            <if test="hamletId != null">
+                hamlet_id = #{hamletId},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="CmsNews">
+        UPDATE cms_news
+        <trim prefix="SET" suffixOverrides=",">
+                province_id = #{provinceId},
+                city_id = #{cityId},
+                district_id = #{districtId},
+                villages_id = #{villagesId},
+                hamlet_id = #{hamletId},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE cms_news
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.provinceId!=null">
+                province_id = #{update.provinceId},
+            </if>
+            <if test="update.cityId!=null">
+                city_id = #{update.cityId},
+            </if>
+            <if test="update.districtId!=null">
+                district_id = #{update.districtId},
+            </if>
+            <if test="update.villagesId!=null">
+                villages_id = #{update.villagesId},
+            </if>
+            <if test="update.hamletId!=null">
+                hamlet_id = #{update.hamletId},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.villagesId!=null">
+                AND villages_id = #{condition.villagesId}
+            </if>
+            <if test="condition.hamletId!=null">
+                AND hamlet_id = #{condition.hamletId}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM cms_news
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM cms_news WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM cms_news
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.villagesId!=null">
+                AND villages_id = #{condition.villagesId}
+            </if>
+            <if test="condition.hamletId!=null">
+                AND hamlet_id = #{condition.hamletId}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

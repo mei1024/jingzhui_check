@@ -1,0 +1,6 @@
+dependencies {
+	/** compile local **/
+	compile( 
+	    project(":jingzhui-cms-domain")
+	)
+}

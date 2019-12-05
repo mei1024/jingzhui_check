@@ -1,0 +1,35 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: solar-uc-service
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      
+ignored:
+  urls:
+    - /swagger-resources/**
+    - /webjars/**
+    - /swagger-ui.html/**
+    - /**/*.css
+    - /v2/api-docs/**
+    - /configuration/ui
+    - /configuration/security
+    - /monitor/**
+    - /icon/**
+    - /security/validate/**
+    - /security/user/token
+    - /security/user/logout
+    - /ds/**
+    - /wx/**
+    - /cms/category/**
+    - /cms/tag/**
+    - /cms/news/**
+    - /cms/video/**
+    - /cms/expert/**
+    - /media/**
+
+    
+    

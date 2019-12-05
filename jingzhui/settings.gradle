@@ -1,0 +1,52 @@
+rootProject.name=projectName
+
+
+include 'jingzhui-mb-api'
+project(':jingzhui-mb-api').projectDir = file('wanzhi_jingzhui_base/jingzhui-mb/jingzhui-mb-api')
+
+include 'jingzhui-mb-domain'
+project(':jingzhui-mb-domain').projectDir = file('wanzhi_jingzhui_base/jingzhui-mb/jingzhui-mb-domain')
+
+include 'jingzhui-mb-service'
+project(':jingzhui-mb-service').projectDir = file('wanzhi_jingzhui_base/jingzhui-mb/jingzhui-mb-service')
+
+
+include 'jingzhui-job-api'
+project(':jingzhui-job-api').projectDir = file('wanzhi_jingzhui_base/jingzhui-job/jingzhui-job-api')
+
+include 'jingzhui-job-domain'
+project(':jingzhui-job-domain').projectDir = file('wanzhi_jingzhui_base/jingzhui-job/jingzhui-job-domain')
+
+include 'jingzhui-job-service'
+project(':jingzhui-job-service').projectDir = file('wanzhi_jingzhui_base/jingzhui-job/jingzhui-job-service')
+
+
+include 'jingzhui-uc-api'
+project(':jingzhui-uc-api').projectDir = file('wanzhi_jingzhui-uc/jingzhui-uc-api')
+
+include 'jingzhui-uc-domain'
+project(':jingzhui-uc-domain').projectDir = file('wanzhi_jingzhui-uc/jingzhui-uc-domain')
+
+include 'jingzhui-uc-service'
+project(':jingzhui-uc-service').projectDir = file('wanzhi_jingzhui-uc/jingzhui-uc-service')
+
+
+include 'jingzhui-cms-api'
+project(':jingzhui-cms-api').projectDir = file('wanzhi_jingzhui-cms/jingzhui-cms-api')
+
+include 'jingzhui-cms-domain'
+project(':jingzhui-cms-domain').projectDir = file('wanzhi_jingzhui-cms/jingzhui-cms-domain')
+
+include 'jingzhui-cms-service'
+project(':jingzhui-cms-service').projectDir = file('wanzhi_jingzhui-cms/jingzhui-cms-service')
+
+
+include 'jingzhui-bi-api'
+project(':jingzhui-bi-api').projectDir = file('wanzhi_jingzhui-bi/jingzhui-bi-api')
+
+include 'jingzhui-bi-domain'
+project(':jingzhui-bi-domain').projectDir = file('wanzhi_jingzhui-bi/jingzhui-bi-domain')
+
+include 'jingzhui-bi-service'
+project(':jingzhui-bi-service').projectDir = file('wanzhi_jingzhui-bi/jingzhui-bi-service')
+

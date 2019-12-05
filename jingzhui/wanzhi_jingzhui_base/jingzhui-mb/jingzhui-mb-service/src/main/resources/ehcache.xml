@@ -1,0 +1,126 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3"
+        xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
+        xsi:schemaLocation="
+            http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+            http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+
+  <cache-template name="heap-cache">
+    <resources>
+      <heap unit="entries">5000</heap>
+      <offheap unit="MB">100</offheap> <!-- unit of measure is case sensitive! -->
+    </resources>
+  </cache-template>
+  
+  <!-- 验证码 存活时间30分钟 -->
+  <cache alias="solar_ms_security_code" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+  
+  <!-- 用户 存活时间30分钟-->
+  <cache alias="solar_user" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+  
+  <!-- 异地用户登录 存活时间30分钟 1800-->
+  <cache alias="oauth2_other_device_login" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+
+  <!-- 角色 存活时间30分钟-->
+  <cache alias="solar_mas_role" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+  
+  <!-- 参数 存活时间30分钟 -->
+  <cache alias="solar_ds_variable" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+  
+  <!-- 乡镇 存活时间30分钟 -->
+  <cache alias="solar_ds_villages" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+
+  <!-- 村 存活时间30分钟 -->
+  <cache alias="solar_ds_hamlet" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+
+  <!-- TAG标签 存活时间30分钟 -->
+  <cache alias="solar_ds_tag" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+
+  <!-- TAG类型 存活时间30分钟 -->
+  <cache alias="solar_ds_tagtype" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+
+  <!-- CMS - TAG 存活时间30分钟 -->
+  <cache alias="solar_cms_tag" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+  
+  <!-- CMS - TAG类型 存活时间30分钟 -->
+  <cache alias="solar_cms_tagtype" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+
+  <!-- CMS - AD 存活时间30分钟 -->
+  <cache alias="solar_cms_ad" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+
+  <!-- CMS - Video 存活时间30分钟 -->
+  <cache alias="solar_cms_video" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+
+  <!-- 时间段分组缓存名称 存活时间30分钟 -->
+  <cache alias="lark_course_time_range_group" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+  
+  <!-- 时间段缓存名称 存活时间30分钟 -->
+  <cache alias="lark_course_time_range" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>
+  
+  <!-- 课程分类缓存名称 存活时间30分钟 -->
+  <cache alias="lark_course_category" uses-template="heap-cache">
+    <expiry>
+      <ttl unit="minutes">30</ttl>
+    </expiry>
+  </cache>  
+</config>

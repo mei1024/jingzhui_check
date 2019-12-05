@@ -1,0 +1,1776 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.uc.dal.dao.MemberDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        user_name as userName,
+        status as status,
+        rank as rank,
+        real_name as realName,
+        nick_name as nickName,
+        sex as sex,
+        birthday as birthday,
+        id_type as idType,
+        id_card as idCard,
+        avatar_url as avatarUrl,
+        tel as tel,
+        mobile as mobile,
+        email as email,
+        qq as qq,
+        home_phone as homePhone,
+        home_address as homeAddress,
+        intro as intro,
+        work_years as workYears,
+        profession as profession,
+        office_address as officeAddress,
+        province_id as provinceId,
+        city_id as cityId,
+        district_id as districtId,
+        reg_source as regSource,
+        reg_ip as regIp,
+        reg_time as regTime,
+        reg_area as regArea,
+        last_login_ip as lastLoginIp,
+        last_login_time as lastLoginTime,
+        last_login_area as lastLoginArea,
+        mobile_verification as mobileVerification,
+        email_verification as emailVerification,
+        invite_code as inviteCode,
+        inviter as inviter,
+        is_agent as isAgent,
+        memo as memo,
+        dstatus as dstatus,
+        creator as creator,
+        createDate as createDate,
+        lastModifier as lastModifier,
+        lastModDate as lastModDate,
+        version as version
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="Member">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="Member">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="Member">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userName!=null">
+                AND user_name = #{condition.userName}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.rank!=null">
+                AND rank = #{condition.rank}
+            </if>
+            <if test="condition.realName!=null">
+                AND real_name = #{condition.realName}
+            </if>
+            <if test="condition.nickName!=null">
+                AND nick_name = #{condition.nickName}
+            </if>
+            <if test="condition.sex!=null">
+                AND sex = #{condition.sex}
+            </if>
+            <if test="condition.birthday!=null">
+                AND birthday = #{condition.birthday}
+            </if>
+            <if test="condition.idType!=null">
+                AND id_type = #{condition.idType}
+            </if>
+            <if test="condition.idCard!=null">
+                AND id_card = #{condition.idCard}
+            </if>
+            <if test="condition.avatarUrl!=null">
+                AND avatar_url = #{condition.avatarUrl}
+            </if>
+            <if test="condition.tel!=null">
+                AND tel = #{condition.tel}
+            </if>
+            <if test="condition.mobile!=null">
+                AND mobile = #{condition.mobile}
+            </if>
+            <if test="condition.email!=null">
+                AND email = #{condition.email}
+            </if>
+            <if test="condition.qq!=null">
+                AND qq = #{condition.qq}
+            </if>
+            <if test="condition.homePhone!=null">
+                AND home_phone = #{condition.homePhone}
+            </if>
+            <if test="condition.homeAddress!=null">
+                AND home_address = #{condition.homeAddress}
+            </if>
+            <if test="condition.intro!=null">
+                AND intro = #{condition.intro}
+            </if>
+            <if test="condition.workYears!=null">
+                AND work_years = #{condition.workYears}
+            </if>
+            <if test="condition.profession!=null">
+                AND profession = #{condition.profession}
+            </if>
+            <if test="condition.officeAddress!=null">
+                AND office_address = #{condition.officeAddress}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.regSource!=null">
+                AND reg_source = #{condition.regSource}
+            </if>
+            <if test="condition.regIp!=null">
+                AND reg_ip = #{condition.regIp}
+            </if>
+            <if test="condition.regTime!=null">
+                AND reg_time = #{condition.regTime}
+            </if>
+            <if test="condition.regArea!=null">
+                AND reg_area = #{condition.regArea}
+            </if>
+            <if test="condition.lastLoginIp!=null">
+                AND last_login_ip = #{condition.lastLoginIp}
+            </if>
+            <if test="condition.lastLoginTime!=null">
+                AND last_login_time = #{condition.lastLoginTime}
+            </if>
+            <if test="condition.lastLoginArea!=null">
+                AND last_login_area = #{condition.lastLoginArea}
+            </if>
+            <if test="condition.mobileVerification!=null">
+                AND mobile_verification = #{condition.mobileVerification}
+            </if>
+            <if test="condition.emailVerification!=null">
+                AND email_verification = #{condition.emailVerification}
+            </if>
+            <if test="condition.inviteCode!=null">
+                AND invite_code = #{condition.inviteCode}
+            </if>
+            <if test="condition.inviter!=null">
+                AND inviter = #{condition.inviter}
+            </if>
+            <if test="condition.isAgent!=null">
+                AND is_agent = #{condition.isAgent}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND createDate = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND lastModifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND lastModDate = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="Member">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="Member">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userName!=null">
+                AND user_name = #{condition.userName}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.rank!=null">
+                AND rank = #{condition.rank}
+            </if>
+            <if test="condition.realName!=null">
+                AND real_name = #{condition.realName}
+            </if>
+            <if test="condition.nickName!=null">
+                AND nick_name = #{condition.nickName}
+            </if>
+            <if test="condition.sex!=null">
+                AND sex = #{condition.sex}
+            </if>
+            <if test="condition.birthday!=null">
+                AND birthday = #{condition.birthday}
+            </if>
+            <if test="condition.idType!=null">
+                AND id_type = #{condition.idType}
+            </if>
+            <if test="condition.idCard!=null">
+                AND id_card = #{condition.idCard}
+            </if>
+            <if test="condition.avatarUrl!=null">
+                AND avatar_url = #{condition.avatarUrl}
+            </if>
+            <if test="condition.tel!=null">
+                AND tel = #{condition.tel}
+            </if>
+            <if test="condition.mobile!=null">
+                AND mobile = #{condition.mobile}
+            </if>
+            <if test="condition.email!=null">
+                AND email = #{condition.email}
+            </if>
+            <if test="condition.qq!=null">
+                AND qq = #{condition.qq}
+            </if>
+            <if test="condition.homePhone!=null">
+                AND home_phone = #{condition.homePhone}
+            </if>
+            <if test="condition.homeAddress!=null">
+                AND home_address = #{condition.homeAddress}
+            </if>
+            <if test="condition.intro!=null">
+                AND intro = #{condition.intro}
+            </if>
+            <if test="condition.workYears!=null">
+                AND work_years = #{condition.workYears}
+            </if>
+            <if test="condition.profession!=null">
+                AND profession = #{condition.profession}
+            </if>
+            <if test="condition.officeAddress!=null">
+                AND office_address = #{condition.officeAddress}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.regSource!=null">
+                AND reg_source = #{condition.regSource}
+            </if>
+            <if test="condition.regIp!=null">
+                AND reg_ip = #{condition.regIp}
+            </if>
+            <if test="condition.regTime!=null">
+                AND reg_time = #{condition.regTime}
+            </if>
+            <if test="condition.regArea!=null">
+                AND reg_area = #{condition.regArea}
+            </if>
+            <if test="condition.lastLoginIp!=null">
+                AND last_login_ip = #{condition.lastLoginIp}
+            </if>
+            <if test="condition.lastLoginTime!=null">
+                AND last_login_time = #{condition.lastLoginTime}
+            </if>
+            <if test="condition.lastLoginArea!=null">
+                AND last_login_area = #{condition.lastLoginArea}
+            </if>
+            <if test="condition.mobileVerification!=null">
+                AND mobile_verification = #{condition.mobileVerification}
+            </if>
+            <if test="condition.emailVerification!=null">
+                AND email_verification = #{condition.emailVerification}
+            </if>
+            <if test="condition.inviteCode!=null">
+                AND invite_code = #{condition.inviteCode}
+            </if>
+            <if test="condition.inviter!=null">
+                AND inviter = #{condition.inviter}
+            </if>
+            <if test="condition.isAgent!=null">
+                AND is_agent = #{condition.isAgent}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND createDate between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND lastModifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND lastModDate = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="Member">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="Member">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="Member">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="condition.keyword != null">
+				AND CONCAT(IFNULL(nick_name,''), IFNULL(id,'')) LIKE CONCAT('%', #{condition.keyword} , '%')
+			</if>
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userName!=null">
+                AND user_name = #{condition.userName}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.rank!=null">
+                AND rank = #{condition.rank}
+            </if>
+            <if test="condition.realName!=null">
+                AND real_name = #{condition.realName}
+            </if>
+            <if test="condition.nickName!=null">
+                AND nick_name = #{condition.nickName}
+            </if>
+            <if test="condition.sex!=null">
+                AND sex = #{condition.sex}
+            </if>
+            <if test="condition.birthday!=null">
+                AND birthday = #{condition.birthday}
+            </if>
+            <if test="condition.idType!=null">
+                AND id_type = #{condition.idType}
+            </if>
+            <if test="condition.idCard!=null">
+                AND id_card = #{condition.idCard}
+            </if>
+            <if test="condition.avatarUrl!=null">
+                AND avatar_url = #{condition.avatarUrl}
+            </if>
+            <if test="condition.tel!=null">
+                AND tel = #{condition.tel}
+            </if>
+            <if test="condition.mobile!=null">
+                AND mobile = #{condition.mobile}
+            </if>
+            <if test="condition.email!=null">
+                AND email = #{condition.email}
+            </if>
+            <if test="condition.qq!=null">
+                AND qq = #{condition.qq}
+            </if>
+            <if test="condition.homePhone!=null">
+                AND home_phone = #{condition.homePhone}
+            </if>
+            <if test="condition.homeAddress!=null">
+                AND home_address = #{condition.homeAddress}
+            </if>
+            <if test="condition.intro!=null">
+                AND intro = #{condition.intro}
+            </if>
+            <if test="condition.workYears!=null">
+                AND work_years = #{condition.workYears}
+            </if>
+            <if test="condition.profession!=null">
+                AND profession = #{condition.profession}
+            </if>
+            <if test="condition.officeAddress!=null">
+                AND office_address = #{condition.officeAddress}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.regSource!=null">
+                AND reg_source = #{condition.regSource}
+            </if>
+            <if test="condition.regIp!=null">
+                AND reg_ip = #{condition.regIp}
+            </if>
+            <if test="condition.regTime!=null">
+                AND reg_time = #{condition.regTime}
+            </if>
+            <if test="condition.regArea!=null">
+                AND reg_area = #{condition.regArea}
+            </if>
+            <if test="condition.lastLoginIp!=null">
+                AND last_login_ip = #{condition.lastLoginIp}
+            </if>
+            <if test="condition.lastLoginTime!=null">
+                AND last_login_time = #{condition.lastLoginTime}
+            </if>
+            <if test="condition.lastLoginArea!=null">
+                AND last_login_area = #{condition.lastLoginArea}
+            </if>
+            <if test="condition.mobileVerification!=null">
+                AND mobile_verification = #{condition.mobileVerification}
+            </if>
+            <if test="condition.emailVerification!=null">
+                AND email_verification = #{condition.emailVerification}
+            </if>
+            <if test="condition.inviteCode!=null">
+                AND invite_code = #{condition.inviteCode}
+            </if>
+            <if test="condition.inviter!=null">
+                AND inviter = #{condition.inviter}
+            </if>
+            <if test="condition.isAgent!=null">
+                AND is_agent = #{condition.isAgent}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND createDate between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if> 
+            <if test="condition.lastModifier!=null">
+                AND lastModifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND lastModDate = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+			<if test="condition.regBeginDate!=null and condition.regEndDate!=null">
+				AND reg_time between #{condition.regBeginDate} and #{condition.regEndDate}
+			</if>
+			<if test="condition.lastLoginBeginDate!=null and condition.lastLoginEndDate!=null">
+				AND last_login_time between #{condition.lastLoginBeginDate} and #{condition.lastLoginEndDate}
+			</if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="Member">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM uc_member
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.userName!=null">
+               AND user_name like CONCAT('%', #{condition.userName} , '%')
+            </if>
+            <if test="condition.status!=null">
+               AND status like CONCAT('%', #{condition.status} , '%')
+            </if>
+            <if test="condition.rank!=null">
+               AND rank like CONCAT('%', #{condition.rank} , '%')
+            </if>
+            <if test="condition.realName!=null">
+               AND real_name like CONCAT('%', #{condition.realName} , '%')
+            </if>
+            <if test="condition.nickName!=null">
+               AND nick_name like CONCAT('%', #{condition.nickName} , '%')
+            </if>
+            <if test="condition.sex!=null">
+               AND sex like CONCAT('%', #{condition.sex} , '%')
+            </if>
+            <if test="condition.birthday!=null">
+               AND birthday like CONCAT('%', #{condition.birthday} , '%')
+            </if>
+            <if test="condition.idType!=null">
+               AND id_type like CONCAT('%', #{condition.idType} , '%')
+            </if>
+            <if test="condition.idCard!=null">
+               AND id_card like CONCAT('%', #{condition.idCard} , '%')
+            </if>
+            <if test="condition.avatarUrl!=null">
+               AND avatar_url like CONCAT('%', #{condition.avatarUrl} , '%')
+            </if>
+            <if test="condition.tel!=null">
+               AND tel like CONCAT('%', #{condition.tel} , '%')
+            </if>
+            <if test="condition.mobile!=null">
+               AND mobile like CONCAT('%', #{condition.mobile} , '%')
+            </if>
+            <if test="condition.email!=null">
+               AND email like CONCAT('%', #{condition.email} , '%')
+            </if>
+            <if test="condition.qq!=null">
+               AND qq like CONCAT('%', #{condition.qq} , '%')
+            </if>
+            <if test="condition.homePhone!=null">
+               AND home_phone like CONCAT('%', #{condition.homePhone} , '%')
+            </if>
+            <if test="condition.homeAddress!=null">
+               AND home_address like CONCAT('%', #{condition.homeAddress} , '%')
+            </if>
+            <if test="condition.intro!=null">
+               AND intro like CONCAT('%', #{condition.intro} , '%')
+            </if>
+            <if test="condition.workYears!=null">
+               AND work_years like CONCAT('%', #{condition.workYears} , '%')
+            </if>
+            <if test="condition.profession!=null">
+               AND profession like CONCAT('%', #{condition.profession} , '%')
+            </if>
+            <if test="condition.officeAddress!=null">
+               AND office_address like CONCAT('%', #{condition.officeAddress} , '%')
+            </if>
+            <if test="condition.provinceId!=null">
+               AND province_id like CONCAT('%', #{condition.provinceId} , '%')
+            </if>
+            <if test="condition.cityId!=null">
+               AND city_id like CONCAT('%', #{condition.cityId} , '%')
+            </if>
+            <if test="condition.districtId!=null">
+               AND district_id like CONCAT('%', #{condition.districtId} , '%')
+            </if>
+            <if test="condition.regSource!=null">
+               AND reg_source like CONCAT('%', #{condition.regSource} , '%')
+            </if>
+            <if test="condition.regIp!=null">
+               AND reg_ip like CONCAT('%', #{condition.regIp} , '%')
+            </if>
+            <if test="condition.regTime!=null">
+               AND reg_time like CONCAT('%', #{condition.regTime} , '%')
+            </if>
+            <if test="condition.regArea!=null">
+               AND reg_area like CONCAT('%', #{condition.regArea} , '%')
+            </if>
+            <if test="condition.lastLoginIp!=null">
+               AND last_login_ip like CONCAT('%', #{condition.lastLoginIp} , '%')
+            </if>
+            <if test="condition.lastLoginTime!=null">
+               AND last_login_time like CONCAT('%', #{condition.lastLoginTime} , '%')
+            </if>
+            <if test="condition.lastLoginArea!=null">
+               AND last_login_area like CONCAT('%', #{condition.lastLoginArea} , '%')
+            </if>
+            <if test="condition.mobileVerification!=null">
+               AND mobile_verification like CONCAT('%', #{condition.mobileVerification} , '%')
+            </if>
+            <if test="condition.emailVerification!=null">
+               AND email_verification like CONCAT('%', #{condition.emailVerification} , '%')
+            </if>
+            <if test="condition.inviteCode!=null">
+               AND invite_code like CONCAT('%', #{condition.inviteCode} , '%')
+            </if>
+            <if test="condition.inviter!=null">
+               AND inviter like CONCAT('%', #{condition.inviter} , '%')
+            </if>
+            <if test="condition.isAgent!=null">
+               AND is_agent like CONCAT('%', #{condition.isAgent} , '%')
+            </if>
+            <if test="condition.memo!=null">
+               AND memo like CONCAT('%', #{condition.memo} , '%')
+            </if>
+            <if test="condition.dstatus!=null">
+               AND dstatus like CONCAT('%', #{condition.dstatus} , '%')
+            </if>
+            <if test="condition.creator!=null">
+               AND creator like CONCAT('%', #{condition.creator} , '%')
+            </if>
+            <if test="condition.createDate!=null">
+               AND createDate like CONCAT('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.lastModifier!=null">
+               AND lastModifier like CONCAT('%', #{condition.lastModifier} , '%')
+            </if>
+            <if test="condition.lastModDate!=null">
+               AND lastModDate like CONCAT('%', #{condition.lastModDate} , '%')
+            </if>
+            <if test="condition.version!=null">
+               AND version like CONCAT('%', #{condition.version} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM uc_member
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userName!=null">
+                AND user_name = #{condition.userName}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.rank!=null">
+                AND rank = #{condition.rank}
+            </if>
+            <if test="condition.realName!=null">
+                AND real_name = #{condition.realName}
+            </if>
+            <if test="condition.nickName!=null">
+                AND nick_name = #{condition.nickName}
+            </if>
+            <if test="condition.sex!=null">
+                AND sex = #{condition.sex}
+            </if>
+            <if test="condition.birthday!=null">
+                AND birthday = #{condition.birthday}
+            </if>
+            <if test="condition.idType!=null">
+                AND id_type = #{condition.idType}
+            </if>
+            <if test="condition.idCard!=null">
+                AND id_card = #{condition.idCard}
+            </if>
+            <if test="condition.avatarUrl!=null">
+                AND avatar_url = #{condition.avatarUrl}
+            </if>
+            <if test="condition.tel!=null">
+                AND tel = #{condition.tel}
+            </if>
+            <if test="condition.mobile!=null">
+                AND mobile = #{condition.mobile}
+            </if>
+            <if test="condition.email!=null">
+                AND email = #{condition.email}
+            </if>
+            <if test="condition.qq!=null">
+                AND qq = #{condition.qq}
+            </if>
+            <if test="condition.homePhone!=null">
+                AND home_phone = #{condition.homePhone}
+            </if>
+            <if test="condition.homeAddress!=null">
+                AND home_address = #{condition.homeAddress}
+            </if>
+            <if test="condition.intro!=null">
+                AND intro = #{condition.intro}
+            </if>
+            <if test="condition.workYears!=null">
+                AND work_years = #{condition.workYears}
+            </if>
+            <if test="condition.profession!=null">
+                AND profession = #{condition.profession}
+            </if>
+            <if test="condition.officeAddress!=null">
+                AND office_address = #{condition.officeAddress}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.regSource!=null">
+                AND reg_source = #{condition.regSource}
+            </if>
+            <if test="condition.regIp!=null">
+                AND reg_ip = #{condition.regIp}
+            </if>
+            <if test="condition.regTime!=null">
+                AND reg_time = #{condition.regTime}
+            </if>
+            <if test="condition.regArea!=null">
+                AND reg_area = #{condition.regArea}
+            </if>
+            <if test="condition.lastLoginIp!=null">
+                AND last_login_ip = #{condition.lastLoginIp}
+            </if>
+            <if test="condition.lastLoginTime!=null">
+                AND last_login_time = #{condition.lastLoginTime}
+            </if>
+            <if test="condition.lastLoginArea!=null">
+                AND last_login_area = #{condition.lastLoginArea}
+            </if>
+            <if test="condition.mobileVerification!=null">
+                AND mobile_verification = #{condition.mobileVerification}
+            </if>
+            <if test="condition.emailVerification!=null">
+                AND email_verification = #{condition.emailVerification}
+            </if>
+            <if test="condition.inviteCode!=null">
+                AND invite_code = #{condition.inviteCode}
+            </if>
+            <if test="condition.inviter!=null">
+                AND inviter = #{condition.inviter}
+            </if>
+            <if test="condition.isAgent!=null">
+                AND is_agent = #{condition.isAgent}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND createDate between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if> 
+            <if test="condition.lastModifier!=null">
+                AND lastModifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND lastModDate = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM uc_member
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userName!=null">
+                AND user_name = #{condition.userName}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.rank!=null">
+                AND rank = #{condition.rank}
+            </if>
+            <if test="condition.realName!=null">
+                AND real_name = #{condition.realName}
+            </if>
+            <if test="condition.nickName!=null">
+                AND nick_name = #{condition.nickName}
+            </if>
+            <if test="condition.sex!=null">
+                AND sex = #{condition.sex}
+            </if>
+            <if test="condition.birthday!=null">
+                AND birthday = #{condition.birthday}
+            </if>
+            <if test="condition.idType!=null">
+                AND id_type = #{condition.idType}
+            </if>
+            <if test="condition.idCard!=null">
+                AND id_card = #{condition.idCard}
+            </if>
+            <if test="condition.avatarUrl!=null">
+                AND avatar_url = #{condition.avatarUrl}
+            </if>
+            <if test="condition.tel!=null">
+                AND tel = #{condition.tel}
+            </if>
+            <if test="condition.mobile!=null">
+                AND mobile = #{condition.mobile}
+            </if>
+            <if test="condition.email!=null">
+                AND email = #{condition.email}
+            </if>
+            <if test="condition.qq!=null">
+                AND qq = #{condition.qq}
+            </if>
+            <if test="condition.homePhone!=null">
+                AND home_phone = #{condition.homePhone}
+            </if>
+            <if test="condition.homeAddress!=null">
+                AND home_address = #{condition.homeAddress}
+            </if>
+            <if test="condition.intro!=null">
+                AND intro = #{condition.intro}
+            </if>
+            <if test="condition.workYears!=null">
+                AND work_years = #{condition.workYears}
+            </if>
+            <if test="condition.profession!=null">
+                AND profession = #{condition.profession}
+            </if>
+            <if test="condition.officeAddress!=null">
+                AND office_address = #{condition.officeAddress}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.regSource!=null">
+                AND reg_source = #{condition.regSource}
+            </if>
+            <if test="condition.regIp!=null">
+                AND reg_ip = #{condition.regIp}
+            </if>
+            <if test="condition.regTime!=null">
+                AND reg_time = #{condition.regTime}
+            </if>
+            <if test="condition.regArea!=null">
+                AND reg_area = #{condition.regArea}
+            </if>
+            <if test="condition.lastLoginIp!=null">
+                AND last_login_ip = #{condition.lastLoginIp}
+            </if>
+            <if test="condition.lastLoginTime!=null">
+                AND last_login_time = #{condition.lastLoginTime}
+            </if>
+            <if test="condition.lastLoginArea!=null">
+                AND last_login_area = #{condition.lastLoginArea}
+            </if>
+            <if test="condition.mobileVerification!=null">
+                AND mobile_verification = #{condition.mobileVerification}
+            </if>
+            <if test="condition.emailVerification!=null">
+                AND email_verification = #{condition.emailVerification}
+            </if>
+            <if test="condition.inviteCode!=null">
+                AND invite_code = #{condition.inviteCode}
+            </if>
+            <if test="condition.inviter!=null">
+                AND inviter = #{condition.inviter}
+            </if>
+            <if test="condition.isAgent!=null">
+                AND is_agent = #{condition.isAgent}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND createDate between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+            <if test="condition.lastModifier!=null">
+                AND lastModifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND lastModDate = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="Member" >
+        INSERT INTO uc_member (
+	        id,
+	        user_name,
+	        status,
+	        rank,
+	        real_name,
+	        nick_name,
+	        sex,
+	        birthday,
+	        id_type,
+	        id_card,
+	        avatar_url,
+	        tel,
+	        mobile,
+	        email,
+	        qq,
+	        home_phone,
+	        home_address,
+	        intro,
+	        work_years,
+	        profession,
+	        office_address,
+	        province_id,
+	        city_id,
+	        district_id,
+	        reg_source,
+	        reg_ip,
+	        reg_time,
+	        reg_area,
+	        last_login_ip,
+	        last_login_time,
+	        last_login_area,
+	        mobile_verification,
+	        email_verification,
+	        invite_code,
+	        inviter,
+	        is_agent,
+	        memo,
+	        dstatus,
+	        creator,
+	        createDate,
+	        lastModifier,
+	        lastModDate,
+	        version
+        ) VALUES (
+	        #{id},
+	        #{userName},
+	        #{status},
+	        #{rank},
+	        #{realName},
+	        #{nickName},
+	        #{sex},
+	        #{birthday},
+	        #{idType},
+	        #{idCard},
+	        #{avatarUrl},
+	        #{tel},
+	        #{mobile},
+	        #{email},
+	        #{qq},
+	        #{homePhone},
+	        #{homeAddress},
+	        #{intro},
+	        #{workYears},
+	        #{profession},
+	        #{officeAddress},
+	        #{provinceId},
+	        #{cityId},
+	        #{districtId},
+	        #{regSource},
+	        #{regIp},
+	        #{regTime},
+	        #{regArea},
+	        #{lastLoginIp},
+	        #{lastLoginTime},
+	        #{lastLoginArea},
+	        #{mobileVerification},
+	        #{emailVerification},
+	        #{inviteCode},
+	        #{inviter},
+	        #{isAgent},
+	        #{memo},
+	        #{dstatus},
+	        #{creator},
+	        #{createDate},
+	        #{lastModifier},
+	        #{lastModDate},
+	        #{version}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list" >
+        INSERT INTO uc_member (
+	        id,
+	        user_name,
+	        status,
+	        rank,
+	        real_name,
+	        nick_name,
+	        sex,
+	        birthday,
+	        id_type,
+	        id_card,
+	        avatar_url,
+	        tel,
+	        mobile,
+	        email,
+	        qq,
+	        home_phone,
+	        home_address,
+	        intro,
+	        work_years,
+	        profession,
+	        office_address,
+	        province_id,
+	        city_id,
+	        district_id,
+	        reg_source,
+	        reg_ip,
+	        reg_time,
+	        reg_area,
+	        last_login_ip,
+	        last_login_time,
+	        last_login_area,
+	        mobile_verification,
+	        email_verification,
+	        invite_code,
+	        inviter,
+	        is_agent,
+	        memo,
+	        dstatus,
+	        creator,
+	        createDate,
+	        lastModifier,
+	        lastModDate,
+	        version
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.id},
+	        #{item.userName},
+	        #{item.status},
+	        #{item.rank},
+	        #{item.realName},
+	        #{item.nickName},
+	        #{item.sex},
+	        #{item.birthday},
+	        #{item.idType},
+	        #{item.idCard},
+	        #{item.avatarUrl},
+	        #{item.tel},
+	        #{item.mobile},
+	        #{item.email},
+	        #{item.qq},
+	        #{item.homePhone},
+	        #{item.homeAddress},
+	        #{item.intro},
+	        #{item.workYears},
+	        #{item.profession},
+	        #{item.officeAddress},
+	        #{item.provinceId},
+	        #{item.cityId},
+	        #{item.districtId},
+	        #{item.regSource},
+	        #{item.regIp},
+	        #{item.regTime},
+	        #{item.regArea},
+	        #{item.lastLoginIp},
+	        #{item.lastLoginTime},
+	        #{item.lastLoginArea},
+	        #{item.mobileVerification},
+	        #{item.emailVerification},
+	        #{item.inviteCode},
+	        #{item.inviter},
+	        #{item.isAgent},
+	        #{item.memo},
+	        #{item.dstatus},
+	        #{item.creator},
+	        #{item.createDate},
+	        #{item.lastModifier},
+	        #{item.lastModDate},
+	        #{item.version}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="Member">
+        UPDATE uc_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null">
+                user_name = #{userName},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="rank != null">
+                rank = #{rank},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="idType != null">
+                id_type = #{idType},
+            </if>
+            <if test="idCard != null">
+                id_card = #{idCard},
+            </if>
+            <if test="avatarUrl != null">
+                avatar_url = #{avatarUrl},
+            </if>
+            <if test="tel != null">
+                tel = #{tel},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="qq != null">
+                qq = #{qq},
+            </if>
+            <if test="homePhone != null">
+                home_phone = #{homePhone},
+            </if>
+            <if test="homeAddress != null">
+                home_address = #{homeAddress},
+            </if>
+            <if test="intro != null">
+                intro = #{intro},
+            </if>
+            <if test="workYears != null">
+                work_years = #{workYears},
+            </if>
+            <if test="profession != null">
+                profession = #{profession},
+            </if>
+            <if test="officeAddress != null">
+                office_address = #{officeAddress},
+            </if>
+            <if test="provinceId != null">
+                province_id = #{provinceId},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId},
+            </if>
+            <if test="districtId != null">
+                district_id = #{districtId},
+            </if>
+            <if test="regSource != null">
+                reg_source = #{regSource},
+            </if>
+            <if test="regIp != null">
+                reg_ip = #{regIp},
+            </if>
+            <if test="regTime != null">
+                reg_time = #{regTime},
+            </if>
+            <if test="regArea != null">
+                reg_area = #{regArea},
+            </if>
+            <if test="lastLoginIp != null">
+                last_login_ip = #{lastLoginIp},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime},
+            </if>
+            <if test="lastLoginArea != null">
+                last_login_area = #{lastLoginArea},
+            </if>
+            <if test="mobileVerification != null">
+                mobile_verification = #{mobileVerification},
+            </if>
+            <if test="emailVerification != null">
+                email_verification = #{emailVerification},
+            </if>
+            <if test="inviteCode != null">
+                invite_code = #{inviteCode},
+            </if>
+            <if test="inviter != null">
+                inviter = #{inviter},
+            </if>
+            <if test="isAgent != null">
+                is_agent = #{isAgent},
+            </if>
+            <if test="memo != null">
+                memo = #{memo},
+            </if>
+            <if test="dstatus != null">
+                dstatus = #{dstatus},
+            </if>
+            <if test="creator != null">
+                creator = #{creator},
+            </if>
+            <if test="createDate != null">
+                createDate = #{createDate},
+            </if>
+            <if test="lastModifier != null">
+                lastModifier = #{lastModifier},
+            </if>
+            <if test="lastModDate != null">
+                lastModDate = #{lastModDate},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="Member">
+        UPDATE uc_member
+        <trim prefix="SET" suffixOverrides=",">
+                user_name = #{userName},
+                status = #{status},
+                rank = #{rank},
+                real_name = #{realName},
+                nick_name = #{nickName},
+                sex = #{sex},
+                birthday = #{birthday},
+                id_type = #{idType},
+                id_card = #{idCard},
+                avatar_url = #{avatarUrl},
+                tel = #{tel},
+                mobile = #{mobile},
+                email = #{email},
+                qq = #{qq},
+                home_phone = #{homePhone},
+                home_address = #{homeAddress},
+                intro = #{intro},
+                work_years = #{workYears},
+                profession = #{profession},
+                office_address = #{officeAddress},
+                province_id = #{provinceId},
+                city_id = #{cityId},
+                district_id = #{districtId},
+                reg_source = #{regSource},
+                reg_ip = #{regIp},
+                reg_time = #{regTime},
+                reg_area = #{regArea},
+                last_login_ip = #{lastLoginIp},
+                last_login_time = #{lastLoginTime},
+                last_login_area = #{lastLoginArea},
+                mobile_verification = #{mobileVerification},
+                email_verification = #{emailVerification},
+                invite_code = #{inviteCode},
+                inviter = #{inviter},
+                is_agent = #{isAgent},
+                memo = #{memo},
+                dstatus = #{dstatus},
+                creator = #{creator},
+                createDate = #{createDate},
+                lastModifier = #{lastModifier},
+                lastModDate = #{lastModDate},
+                version = #{version},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE uc_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.userName!=null">
+                user_name = #{update.userName},
+            </if>
+            <if test="update.status!=null">
+                status = #{update.status},
+            </if>
+            <if test="update.rank!=null">
+                rank = #{update.rank},
+            </if>
+            <if test="update.realName!=null">
+                real_name = #{update.realName},
+            </if>
+            <if test="update.nickName!=null">
+                nick_name = #{update.nickName},
+            </if>
+            <if test="update.sex!=null">
+                sex = #{update.sex},
+            </if>
+            <if test="update.birthday!=null">
+                birthday = #{update.birthday},
+            </if>
+            <if test="update.idType!=null">
+                id_type = #{update.idType},
+            </if>
+            <if test="update.idCard!=null">
+                id_card = #{update.idCard},
+            </if>
+            <if test="update.avatarUrl!=null">
+                avatar_url = #{update.avatarUrl},
+            </if>
+            <if test="update.tel!=null">
+                tel = #{update.tel},
+            </if>
+            <if test="update.mobile!=null">
+                mobile = #{update.mobile},
+            </if>
+            <if test="update.email!=null">
+                email = #{update.email},
+            </if>
+            <if test="update.qq!=null">
+                qq = #{update.qq},
+            </if>
+            <if test="update.homePhone!=null">
+                home_phone = #{update.homePhone},
+            </if>
+            <if test="update.homeAddress!=null">
+                home_address = #{update.homeAddress},
+            </if>
+            <if test="update.intro!=null">
+                intro = #{update.intro},
+            </if>
+            <if test="update.workYears!=null">
+                work_years = #{update.workYears},
+            </if>
+            <if test="update.profession!=null">
+                profession = #{update.profession},
+            </if>
+            <if test="update.officeAddress!=null">
+                office_address = #{update.officeAddress},
+            </if>
+            <if test="update.provinceId!=null">
+                province_id = #{update.provinceId},
+            </if>
+            <if test="update.cityId!=null">
+                city_id = #{update.cityId},
+            </if>
+            <if test="update.districtId!=null">
+                district_id = #{update.districtId},
+            </if>
+            <if test="update.regSource!=null">
+                reg_source = #{update.regSource},
+            </if>
+            <if test="update.regIp!=null">
+                reg_ip = #{update.regIp},
+            </if>
+            <if test="update.regTime!=null">
+                reg_time = #{update.regTime},
+            </if>
+            <if test="update.regArea!=null">
+                reg_area = #{update.regArea},
+            </if>
+            <if test="update.lastLoginIp!=null">
+                last_login_ip = #{update.lastLoginIp},
+            </if>
+            <if test="update.lastLoginTime!=null">
+                last_login_time = #{update.lastLoginTime},
+            </if>
+            <if test="update.lastLoginArea!=null">
+                last_login_area = #{update.lastLoginArea},
+            </if>
+            <if test="update.mobileVerification!=null">
+                mobile_verification = #{update.mobileVerification},
+            </if>
+            <if test="update.emailVerification!=null">
+                email_verification = #{update.emailVerification},
+            </if>
+            <if test="update.inviteCode!=null">
+                invite_code = #{update.inviteCode},
+            </if>
+            <if test="update.inviter!=null">
+                inviter = #{update.inviter},
+            </if>
+            <if test="update.isAgent!=null">
+                is_agent = #{update.isAgent},
+            </if>
+            <if test="update.memo!=null">
+                memo = #{update.memo},
+            </if>
+            <if test="update.dstatus!=null">
+                dstatus = #{update.dstatus},
+            </if>
+            <if test="update.creator!=null">
+                creator = #{update.creator},
+            </if>
+            <if test="update.createDate!=null">
+                createDate = #{update.createDate},
+            </if>
+            <if test="update.lastModifier!=null">
+                lastModifier = #{update.lastModifier},
+            </if>
+            <if test="update.lastModDate!=null">
+                lastModDate = #{update.lastModDate},
+            </if>
+            <if test="update.version!=null">
+                version = #{update.version},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userName!=null">
+                AND user_name = #{condition.userName}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.rank!=null">
+                AND rank = #{condition.rank}
+            </if>
+            <if test="condition.realName!=null">
+                AND real_name = #{condition.realName}
+            </if>
+            <if test="condition.nickName!=null">
+                AND nick_name = #{condition.nickName}
+            </if>
+            <if test="condition.sex!=null">
+                AND sex = #{condition.sex}
+            </if>
+            <if test="condition.birthday!=null">
+                AND birthday = #{condition.birthday}
+            </if>
+            <if test="condition.idType!=null">
+                AND id_type = #{condition.idType}
+            </if>
+            <if test="condition.idCard!=null">
+                AND id_card = #{condition.idCard}
+            </if>
+            <if test="condition.avatarUrl!=null">
+                AND avatar_url = #{condition.avatarUrl}
+            </if>
+            <if test="condition.tel!=null">
+                AND tel = #{condition.tel}
+            </if>
+            <if test="condition.mobile!=null">
+                AND mobile = #{condition.mobile}
+            </if>
+            <if test="condition.email!=null">
+                AND email = #{condition.email}
+            </if>
+            <if test="condition.qq!=null">
+                AND qq = #{condition.qq}
+            </if>
+            <if test="condition.homePhone!=null">
+                AND home_phone = #{condition.homePhone}
+            </if>
+            <if test="condition.homeAddress!=null">
+                AND home_address = #{condition.homeAddress}
+            </if>
+            <if test="condition.intro!=null">
+                AND intro = #{condition.intro}
+            </if>
+            <if test="condition.workYears!=null">
+                AND work_years = #{condition.workYears}
+            </if>
+            <if test="condition.profession!=null">
+                AND profession = #{condition.profession}
+            </if>
+            <if test="condition.officeAddress!=null">
+                AND office_address = #{condition.officeAddress}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.regSource!=null">
+                AND reg_source = #{condition.regSource}
+            </if>
+            <if test="condition.regIp!=null">
+                AND reg_ip = #{condition.regIp}
+            </if>
+            <if test="condition.regTime!=null">
+                AND reg_time = #{condition.regTime}
+            </if>
+            <if test="condition.regArea!=null">
+                AND reg_area = #{condition.regArea}
+            </if>
+            <if test="condition.lastLoginIp!=null">
+                AND last_login_ip = #{condition.lastLoginIp}
+            </if>
+            <if test="condition.lastLoginTime!=null">
+                AND last_login_time = #{condition.lastLoginTime}
+            </if>
+            <if test="condition.lastLoginArea!=null">
+                AND last_login_area = #{condition.lastLoginArea}
+            </if>
+            <if test="condition.mobileVerification!=null">
+                AND mobile_verification = #{condition.mobileVerification}
+            </if>
+            <if test="condition.emailVerification!=null">
+                AND email_verification = #{condition.emailVerification}
+            </if>
+            <if test="condition.inviteCode!=null">
+                AND invite_code = #{condition.inviteCode}
+            </if>
+            <if test="condition.inviter!=null">
+                AND inviter = #{condition.inviter}
+            </if>
+            <if test="condition.isAgent!=null">
+                AND is_agent = #{condition.isAgent}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND createDate between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+            <if test="condition.lastModifier!=null">
+                AND lastModifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND lastModDate = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM uc_member
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM uc_member WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM uc_member
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.userName!=null">
+                AND user_name = #{condition.userName}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.rank!=null">
+                AND rank = #{condition.rank}
+            </if>
+            <if test="condition.realName!=null">
+                AND real_name = #{condition.realName}
+            </if>
+            <if test="condition.nickName!=null">
+                AND nick_name = #{condition.nickName}
+            </if>
+            <if test="condition.sex!=null">
+                AND sex = #{condition.sex}
+            </if>
+            <if test="condition.birthday!=null">
+                AND birthday = #{condition.birthday}
+            </if>
+            <if test="condition.idType!=null">
+                AND id_type = #{condition.idType}
+            </if>
+            <if test="condition.idCard!=null">
+                AND id_card = #{condition.idCard}
+            </if>
+            <if test="condition.avatarUrl!=null">
+                AND avatar_url = #{condition.avatarUrl}
+            </if>
+            <if test="condition.tel!=null">
+                AND tel = #{condition.tel}
+            </if>
+            <if test="condition.mobile!=null">
+                AND mobile = #{condition.mobile}
+            </if>
+            <if test="condition.email!=null">
+                AND email = #{condition.email}
+            </if>
+            <if test="condition.qq!=null">
+                AND qq = #{condition.qq}
+            </if>
+            <if test="condition.homePhone!=null">
+                AND home_phone = #{condition.homePhone}
+            </if>
+            <if test="condition.homeAddress!=null">
+                AND home_address = #{condition.homeAddress}
+            </if>
+            <if test="condition.intro!=null">
+                AND intro = #{condition.intro}
+            </if>
+            <if test="condition.workYears!=null">
+                AND work_years = #{condition.workYears}
+            </if>
+            <if test="condition.profession!=null">
+                AND profession = #{condition.profession}
+            </if>
+            <if test="condition.officeAddress!=null">
+                AND office_address = #{condition.officeAddress}
+            </if>
+            <if test="condition.provinceId!=null">
+                AND province_id = #{condition.provinceId}
+            </if>
+            <if test="condition.cityId!=null">
+                AND city_id = #{condition.cityId}
+            </if>
+            <if test="condition.districtId!=null">
+                AND district_id = #{condition.districtId}
+            </if>
+            <if test="condition.regSource!=null">
+                AND reg_source = #{condition.regSource}
+            </if>
+            <if test="condition.regIp!=null">
+                AND reg_ip = #{condition.regIp}
+            </if>
+            <if test="condition.regTime!=null">
+                AND reg_time = #{condition.regTime}
+            </if>
+            <if test="condition.regArea!=null">
+                AND reg_area = #{condition.regArea}
+            </if>
+            <if test="condition.lastLoginIp!=null">
+                AND last_login_ip = #{condition.lastLoginIp}
+            </if>
+            <if test="condition.lastLoginTime!=null">
+                AND last_login_time = #{condition.lastLoginTime}
+            </if>
+            <if test="condition.lastLoginArea!=null">
+                AND last_login_area = #{condition.lastLoginArea}
+            </if>
+            <if test="condition.mobileVerification!=null">
+                AND mobile_verification = #{condition.mobileVerification}
+            </if>
+            <if test="condition.emailVerification!=null">
+                AND email_verification = #{condition.emailVerification}
+            </if>
+            <if test="condition.inviteCode!=null">
+                AND invite_code = #{condition.inviteCode}
+            </if>
+            <if test="condition.inviter!=null">
+                AND inviter = #{condition.inviter}
+            </if>
+            <if test="condition.isAgent!=null">
+                AND is_agent = #{condition.isAgent}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND createDate between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>  
+            <if test="condition.lastModifier!=null">
+                AND lastModifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND lastModDate = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

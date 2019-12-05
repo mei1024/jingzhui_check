@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="logPrefix" value="dao."/>
+        
+        <!-- 使全局的映射器启用或禁用缓存。 -->
+		<setting name="cacheEnabled" value="true"/>
+        
+        <!-- 设置但JDBC类型为空时,某些驱动程序 要指定值,default:OTHER，插入空值时不需要指定类型 -->
+        <setting name="jdbcTypeForNull" value="NULL"/>
+        <!--  -->
+        <setting name="logImpl" value="STDOUT_LOGGING" /> 
+    </settings>
+    
+    <plugins>
+       <plugin interceptor="com.nebula.common.biz.dal.intercept.MyBatisUpdateInterceptor"></plugin>
+    </plugins>
+	
+</configuration>

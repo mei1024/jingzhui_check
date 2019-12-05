@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.cms.dal.dao.CmsContentAttributeDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        source as source,
+        source_url as sourceUrl,
+        text as text,
+        word_count as wordCount
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="CmsContentAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_content_attribute
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="CmsContentAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_content_attribute
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="CmsContentAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_content_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.source!=null">
+                AND source = #{condition.source}
+            </if>
+            <if test="condition.sourceUrl!=null">
+                AND source_url = #{condition.sourceUrl}
+            </if>
+            <if test="condition.text!=null">
+                AND text = #{condition.text}
+            </if>
+            <if test="condition.wordCount!=null">
+                AND word_count = #{condition.wordCount}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="CmsContentAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_content_attribute
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="CmsContentAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_content_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.source!=null">
+                AND source = #{condition.source}
+            </if>
+            <if test="condition.sourceUrl!=null">
+                AND source_url = #{condition.sourceUrl}
+            </if>
+            <if test="condition.text!=null">
+                AND text = #{condition.text}
+            </if>
+            <if test="condition.wordCount!=null">
+                AND word_count = #{condition.wordCount}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="CmsContentAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_content_attribute WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="CmsContentAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_content_attribute WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsContentAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_content_attribute
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.source!=null">
+                AND source = #{condition.source}
+            </if>
+            <if test="condition.sourceUrl!=null">
+                AND source_url = #{condition.sourceUrl}
+            </if>
+            <if test="condition.text!=null">
+                AND text = #{condition.text}
+            </if>
+            <if test="condition.wordCount!=null">
+                AND word_count = #{condition.wordCount}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="CmsContentAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_content_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.source!=null">
+               AND source like CONCAT('%', #{condition.source} , '%')
+            </if>
+            <if test="condition.sourceUrl!=null">
+               AND source_url like CONCAT('%', #{condition.sourceUrl} , '%')
+            </if>
+            <if test="condition.text!=null">
+               AND text like CONCAT('%', #{condition.text} , '%')
+            </if>
+            <if test="condition.wordCount!=null">
+               AND word_count like CONCAT('%', #{condition.wordCount} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_content_attribute
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.source!=null">
+                AND source = #{condition.source}
+            </if>
+            <if test="condition.sourceUrl!=null">
+                AND source_url = #{condition.sourceUrl}
+            </if>
+            <if test="condition.text!=null">
+                AND text = #{condition.text}
+            </if>
+            <if test="condition.wordCount!=null">
+                AND word_count = #{condition.wordCount}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM cms_content_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.source!=null">
+                AND source = #{condition.source}
+            </if>
+            <if test="condition.sourceUrl!=null">
+                AND source_url = #{condition.sourceUrl}
+            </if>
+            <if test="condition.text!=null">
+                AND text = #{condition.text}
+            </if>
+            <if test="condition.wordCount!=null">
+                AND word_count = #{condition.wordCount}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="CmsContentAttribute" >
+        INSERT INTO cms_content_attribute (
+	        id,
+	        source,
+	        source_url,
+	        text,
+	        word_count
+        ) VALUES (
+	        #{id},
+	        #{source},
+	        #{sourceUrl},
+	        #{text},
+	        #{wordCount}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list" >
+        INSERT INTO cms_content_attribute (
+	        id,
+	        source,
+	        source_url,
+	        text,
+	        word_count
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.id},
+	        #{item.source},
+	        #{item.sourceUrl},
+	        #{item.text},
+	        #{item.wordCount}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="CmsContentAttribute">
+        UPDATE cms_content_attribute
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="source != null">
+                source = #{source},
+            </if>
+            <if test="sourceUrl != null">
+                source_url = #{sourceUrl},
+            </if>
+            <if test="text != null">
+                text = #{text},
+            </if>
+            <if test="wordCount != null">
+                word_count = #{wordCount},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="CmsContentAttribute">
+        UPDATE cms_content_attribute
+        <trim prefix="SET" suffixOverrides=",">
+                source = #{source},
+                source_url = #{sourceUrl},
+                text = #{text},
+                word_count = #{wordCount},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE cms_content_attribute
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.source!=null">
+                source = #{update.source},
+            </if>
+            <if test="update.sourceUrl!=null">
+                source_url = #{update.sourceUrl},
+            </if>
+            <if test="update.text!=null">
+                text = #{update.text},
+            </if>
+            <if test="update.wordCount!=null">
+                word_count = #{update.wordCount},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.source!=null">
+                AND source = #{condition.source}
+            </if>
+            <if test="condition.sourceUrl!=null">
+                AND source_url = #{condition.sourceUrl}
+            </if>
+            <if test="condition.text!=null">
+                AND text = #{condition.text}
+            </if>
+            <if test="condition.wordCount!=null">
+                AND word_count = #{condition.wordCount}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM cms_content_attribute
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM cms_content_attribute WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM cms_content_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.source!=null">
+                AND source = #{condition.source}
+            </if>
+            <if test="condition.sourceUrl!=null">
+                AND source_url = #{condition.sourceUrl}
+            </if>
+            <if test="condition.text!=null">
+                AND text = #{condition.text}
+            </if>
+            <if test="condition.wordCount!=null">
+                AND word_count = #{condition.wordCount}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

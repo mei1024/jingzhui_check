@@ -1,0 +1,1095 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.cms.dal.dao.CmsVideoDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        cover_url as coverUrl,
+        origin_url as originUrl,
+        url240 as url240,
+        url480 as url480,
+        url780 as url780,
+        url1080 as url1080,
+        token240 as token240,
+        token480 as token480,
+        token780 as token780,
+        token1080 as token1080,
+        key240 as key240,
+        key480 as key480,
+        key780 as key780,
+        key1080 as key1080,
+        vstatus as vstatus,
+        vkey as vkey,
+        vavthumb_task_id as vavthumbTaskId,
+        vavthumb_status as vavthumbStatus,
+        vsample_task_id as vsampleTaskId,
+        vsample_status as vsampleStatus,
+        upload_ip as uploadIp,
+        upload_time as uploadTime,
+        size as size,
+        length as length
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="CmsVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_video
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="CmsVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_video
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="CmsVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.coverUrl!=null">
+                AND cover_url = #{condition.coverUrl}
+            </if>
+            <if test="condition.originUrl!=null">
+                AND origin_url = #{condition.originUrl}
+            </if>
+            <if test="condition.url240!=null">
+                AND url240 = #{condition.url240}
+            </if>
+            <if test="condition.url480!=null">
+                AND url480 = #{condition.url480}
+            </if>
+            <if test="condition.url780!=null">
+                AND url780 = #{condition.url780}
+            </if>
+            <if test="condition.url1080!=null">
+                AND url1080 = #{condition.url1080}
+            </if>
+            <if test="condition.token240!=null">
+                AND token240 = #{condition.token240}
+            </if>
+            <if test="condition.token480!=null">
+                AND token480 = #{condition.token480}
+            </if>
+            <if test="condition.token780!=null">
+                AND token780 = #{condition.token780}
+            </if>
+            <if test="condition.token1080!=null">
+                AND token1080 = #{condition.token1080}
+            </if>
+            <if test="condition.key240!=null">
+                AND key240 = #{condition.key240}
+            </if>
+            <if test="condition.key480!=null">
+                AND key480 = #{condition.key480}
+            </if>
+            <if test="condition.key780!=null">
+                AND key780 = #{condition.key780}
+            </if>
+            <if test="condition.key1080!=null">
+                AND key1080 = #{condition.key1080}
+            </if>
+            <if test="condition.vstatus!=null">
+                AND vstatus = #{condition.vstatus}
+            </if>
+            <if test="condition.vkey!=null">
+                AND vkey = #{condition.vkey}
+            </if>
+            <if test="condition.vavthumbTaskId!=null">
+                AND vavthumb_task_id = #{condition.vavthumbTaskId}
+            </if>
+            <if test="condition.vavthumbStatus!=null">
+                AND vavthumb_status = #{condition.vavthumbStatus}
+            </if>
+            <if test="condition.vsampleTaskId!=null">
+                AND vsample_task_id = #{condition.vsampleTaskId}
+            </if>
+            <if test="condition.vsampleStatus!=null">
+                AND vsample_status = #{condition.vsampleStatus}
+            </if>
+            <if test="condition.uploadIp!=null">
+                AND upload_ip = #{condition.uploadIp}
+            </if>
+            <if test="condition.uploadTime!=null">
+                AND upload_time = #{condition.uploadTime}
+            </if>
+            <if test="condition.length!=null">
+                AND length = #{condition.length}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="CmsVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_video
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="CmsVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.coverUrl!=null">
+                AND cover_url = #{condition.coverUrl}
+            </if>
+            <if test="condition.originUrl!=null">
+                AND origin_url = #{condition.originUrl}
+            </if>
+            <if test="condition.url240!=null">
+                AND url240 = #{condition.url240}
+            </if>
+            <if test="condition.url480!=null">
+                AND url480 = #{condition.url480}
+            </if>
+            <if test="condition.url780!=null">
+                AND url780 = #{condition.url780}
+            </if>
+            <if test="condition.url1080!=null">
+                AND url1080 = #{condition.url1080}
+            </if>
+            <if test="condition.token240!=null">
+                AND token240 = #{condition.token240}
+            </if>
+            <if test="condition.token480!=null">
+                AND token480 = #{condition.token480}
+            </if>
+            <if test="condition.token780!=null">
+                AND token780 = #{condition.token780}
+            </if>
+            <if test="condition.token1080!=null">
+                AND token1080 = #{condition.token1080}
+            </if>
+            <if test="condition.key240!=null">
+                AND key240 = #{condition.key240}
+            </if>
+            <if test="condition.key480!=null">
+                AND key480 = #{condition.key480}
+            </if>
+            <if test="condition.key780!=null">
+                AND key780 = #{condition.key780}
+            </if>
+            <if test="condition.key1080!=null">
+                AND key1080 = #{condition.key1080}
+            </if>
+            <if test="condition.vstatus!=null">
+                AND vstatus = #{condition.vstatus}
+            </if>
+            <if test="condition.vkey!=null">
+                AND vkey = #{condition.vkey}
+            </if>
+            <if test="condition.vavthumbTaskId!=null">
+                AND vavthumb_task_id = #{condition.vavthumbTaskId}
+            </if>
+            <if test="condition.vavthumbStatus!=null">
+                AND vavthumb_status = #{condition.vavthumbStatus}
+            </if>
+            <if test="condition.vsampleTaskId!=null">
+                AND vsample_task_id = #{condition.vsampleTaskId}
+            </if>
+            <if test="condition.vsampleStatus!=null">
+                AND vsample_status = #{condition.vsampleStatus}
+            </if>
+            <if test="condition.uploadIp!=null">
+                AND upload_ip = #{condition.uploadIp}
+            </if>
+            <if test="condition.uploadTime!=null">
+                AND upload_time = #{condition.uploadTime}
+            </if>
+            <if test="condition.length!=null">
+                AND length = #{condition.length}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="CmsVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_video WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="CmsVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_video WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_video
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.coverUrl!=null">
+                AND cover_url = #{condition.coverUrl}
+            </if>
+            <if test="condition.originUrl!=null">
+                AND origin_url = #{condition.originUrl}
+            </if>
+            <if test="condition.url240!=null">
+                AND url240 = #{condition.url240}
+            </if>
+            <if test="condition.url480!=null">
+                AND url480 = #{condition.url480}
+            </if>
+            <if test="condition.url780!=null">
+                AND url780 = #{condition.url780}
+            </if>
+            <if test="condition.url1080!=null">
+                AND url1080 = #{condition.url1080}
+            </if>
+            <if test="condition.token240!=null">
+                AND token240 = #{condition.token240}
+            </if>
+            <if test="condition.token480!=null">
+                AND token480 = #{condition.token480}
+            </if>
+            <if test="condition.token780!=null">
+                AND token780 = #{condition.token780}
+            </if>
+            <if test="condition.token1080!=null">
+                AND token1080 = #{condition.token1080}
+            </if>
+            <if test="condition.key240!=null">
+                AND key240 = #{condition.key240}
+            </if>
+            <if test="condition.key480!=null">
+                AND key480 = #{condition.key480}
+            </if>
+            <if test="condition.key780!=null">
+                AND key780 = #{condition.key780}
+            </if>
+            <if test="condition.key1080!=null">
+                AND key1080 = #{condition.key1080}
+            </if>
+            <if test="condition.vstatus!=null">
+                AND vstatus = #{condition.vstatus}
+            </if>
+            <if test="condition.vkey!=null">
+                AND vkey = #{condition.vkey}
+            </if>
+            <if test="condition.vavthumbTaskId!=null">
+                AND vavthumb_task_id = #{condition.vavthumbTaskId}
+            </if>
+            <if test="condition.vavthumbStatus!=null">
+                AND vavthumb_status = #{condition.vavthumbStatus}
+            </if>
+            <if test="condition.vsampleTaskId!=null">
+                AND vsample_task_id = #{condition.vsampleTaskId}
+            </if>
+            <if test="condition.vsampleStatus!=null">
+                AND vsample_status = #{condition.vsampleStatus}
+            </if>
+            <if test="condition.uploadIp!=null">
+                AND upload_ip = #{condition.uploadIp}
+            </if>
+            <if test="condition.uploadTime!=null">
+                AND upload_time = #{condition.uploadTime}
+            </if>
+            <if test="condition.length!=null">
+                AND length = #{condition.length}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="CmsVideo">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.coverUrl!=null">
+               AND cover_url like CONCAT('%', #{condition.coverUrl} , '%')
+            </if>
+            <if test="condition.originUrl!=null">
+               AND origin_url like CONCAT('%', #{condition.originUrl} , '%')
+            </if>
+            <if test="condition.url240!=null">
+               AND url240 like CONCAT('%', #{condition.url240} , '%')
+            </if>
+            <if test="condition.url480!=null">
+               AND url480 like CONCAT('%', #{condition.url480} , '%')
+            </if>
+            <if test="condition.url780!=null">
+               AND url780 like CONCAT('%', #{condition.url780} , '%')
+            </if>
+            <if test="condition.url1080!=null">
+               AND url1080 like CONCAT('%', #{condition.url1080} , '%')
+            </if>
+            <if test="condition.token240!=null">
+               AND token240 like CONCAT('%', #{condition.token240} , '%')
+            </if>
+            <if test="condition.token480!=null">
+               AND token480 like CONCAT('%', #{condition.token480} , '%')
+            </if>
+            <if test="condition.token780!=null">
+               AND token780 like CONCAT('%', #{condition.token780} , '%')
+            </if>
+            <if test="condition.token1080!=null">
+               AND token1080 like CONCAT('%', #{condition.token1080} , '%')
+            </if>
+            <if test="condition.key240!=null">
+               AND key240 like CONCAT('%', #{condition.key240} , '%')
+            </if>
+            <if test="condition.key480!=null">
+               AND key480 like CONCAT('%', #{condition.key480} , '%')
+            </if>
+            <if test="condition.key780!=null">
+               AND key780 like CONCAT('%', #{condition.key780} , '%')
+            </if>
+            <if test="condition.key1080!=null">
+               AND key1080 like CONCAT('%', #{condition.key1080} , '%')
+            </if>
+            <if test="condition.vstatus!=null">
+               AND vstatus like CONCAT('%', #{condition.vstatus} , '%')
+            </if>
+            <if test="condition.vkey!=null">
+               AND vkey like CONCAT('%', #{condition.vkey} , '%')
+            </if>
+            <if test="condition.vavthumbTaskId!=null">
+               AND vavthumb_task_id like CONCAT('%', #{condition.vavthumbTaskId} , '%')
+            </if>
+            <if test="condition.vavthumbStatus!=null">
+               AND vavthumb_status like CONCAT('%', #{condition.vavthumbStatus} , '%')
+            </if>
+            <if test="condition.vsampleTaskId!=null">
+               AND vsample_task_id like CONCAT('%', #{condition.vsampleTaskId} , '%')
+            </if>
+            <if test="condition.vsampleStatus!=null">
+               AND vsample_status like CONCAT('%', #{condition.vsampleStatus} , '%')
+            </if>
+            <if test="condition.uploadIp!=null">
+               AND upload_ip like CONCAT('%', #{condition.uploadIp} , '%')
+            </if>
+            <if test="condition.uploadTime!=null">
+               AND upload_time like CONCAT('%', #{condition.uploadTime} , '%')
+            </if>
+            <if test="condition.length!=null">
+               AND length like CONCAT('%', #{condition.length} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_video
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.coverUrl!=null">
+                AND cover_url = #{condition.coverUrl}
+            </if>
+            <if test="condition.originUrl!=null">
+                AND origin_url = #{condition.originUrl}
+            </if>
+            <if test="condition.url240!=null">
+                AND url240 = #{condition.url240}
+            </if>
+            <if test="condition.url480!=null">
+                AND url480 = #{condition.url480}
+            </if>
+            <if test="condition.url780!=null">
+                AND url780 = #{condition.url780}
+            </if>
+            <if test="condition.url1080!=null">
+                AND url1080 = #{condition.url1080}
+            </if>
+            <if test="condition.token240!=null">
+                AND token240 = #{condition.token240}
+            </if>
+            <if test="condition.token480!=null">
+                AND token480 = #{condition.token480}
+            </if>
+            <if test="condition.token780!=null">
+                AND token780 = #{condition.token780}
+            </if>
+            <if test="condition.token1080!=null">
+                AND token1080 = #{condition.token1080}
+            </if>
+            <if test="condition.key240!=null">
+                AND key240 = #{condition.key240}
+            </if>
+            <if test="condition.key480!=null">
+                AND key480 = #{condition.key480}
+            </if>
+            <if test="condition.key780!=null">
+                AND key780 = #{condition.key780}
+            </if>
+            <if test="condition.key1080!=null">
+                AND key1080 = #{condition.key1080}
+            </if>
+            <if test="condition.vstatus!=null">
+                AND vstatus = #{condition.vstatus}
+            </if>
+            <if test="condition.vkey!=null">
+                AND vkey = #{condition.vkey}
+            </if>
+            <if test="condition.vavthumbTaskId!=null">
+                AND vavthumb_task_id = #{condition.vavthumbTaskId}
+            </if>
+            <if test="condition.vavthumbStatus!=null">
+                AND vavthumb_status = #{condition.vavthumbStatus}
+            </if>
+            <if test="condition.vsampleTaskId!=null">
+                AND vsample_task_id = #{condition.vsampleTaskId}
+            </if>
+            <if test="condition.vsampleStatus!=null">
+                AND vsample_status = #{condition.vsampleStatus}
+            </if>
+            <if test="condition.uploadIp!=null">
+                AND upload_ip = #{condition.uploadIp}
+            </if>
+            <if test="condition.uploadTime!=null">
+                AND upload_time = #{condition.uploadTime}
+            </if>
+            <if test="condition.length!=null">
+                AND length = #{condition.length}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM cms_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.coverUrl!=null">
+                AND cover_url = #{condition.coverUrl}
+            </if>
+            <if test="condition.originUrl!=null">
+                AND origin_url = #{condition.originUrl}
+            </if>
+            <if test="condition.url240!=null">
+                AND url240 = #{condition.url240}
+            </if>
+            <if test="condition.url480!=null">
+                AND url480 = #{condition.url480}
+            </if>
+            <if test="condition.url780!=null">
+                AND url780 = #{condition.url780}
+            </if>
+            <if test="condition.url1080!=null">
+                AND url1080 = #{condition.url1080}
+            </if>
+            <if test="condition.token240!=null">
+                AND token240 = #{condition.token240}
+            </if>
+            <if test="condition.token480!=null">
+                AND token480 = #{condition.token480}
+            </if>
+            <if test="condition.token780!=null">
+                AND token780 = #{condition.token780}
+            </if>
+            <if test="condition.token1080!=null">
+                AND token1080 = #{condition.token1080}
+            </if>
+            <if test="condition.key240!=null">
+                AND key240 = #{condition.key240}
+            </if>
+            <if test="condition.key480!=null">
+                AND key480 = #{condition.key480}
+            </if>
+            <if test="condition.key780!=null">
+                AND key780 = #{condition.key780}
+            </if>
+            <if test="condition.key1080!=null">
+                AND key1080 = #{condition.key1080}
+            </if>
+            <if test="condition.vstatus!=null">
+                AND vstatus = #{condition.vstatus}
+            </if>
+            <if test="condition.vkey!=null">
+                AND vkey = #{condition.vkey}
+            </if>
+            <if test="condition.vavthumbTaskId!=null">
+                AND vavthumb_task_id = #{condition.vavthumbTaskId}
+            </if>
+            <if test="condition.vavthumbStatus!=null">
+                AND vavthumb_status = #{condition.vavthumbStatus}
+            </if>
+            <if test="condition.vsampleTaskId!=null">
+                AND vsample_task_id = #{condition.vsampleTaskId}
+            </if>
+            <if test="condition.vsampleStatus!=null">
+                AND vsample_status = #{condition.vsampleStatus}
+            </if>
+            <if test="condition.uploadIp!=null">
+                AND upload_ip = #{condition.uploadIp}
+            </if>
+            <if test="condition.uploadTime!=null">
+                AND upload_time = #{condition.uploadTime}
+            </if>
+            <if test="condition.length!=null">
+                AND length = #{condition.length}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="CmsVideo" >
+        INSERT INTO cms_video (
+	        id,
+	        cover_url,
+	        origin_url,
+	        url240,
+	        url480,
+	        url780,
+	        url1080,
+	        token240,
+	        token480,
+	        token780,
+	        token1080,
+	        key240,
+	        key480,
+	        key780,
+	        key1080,
+	        vstatus,
+	        vkey,
+	        vavthumb_task_id,
+	        vavthumb_status,
+	        vsample_task_id,
+	        vsample_status,
+	        upload_ip,
+	        upload_time,
+	        size,
+	        length
+        ) VALUES (
+	        #{id},
+	        #{coverUrl},
+	        #{originUrl},
+	        #{url240},
+	        #{url480},
+	        #{url780},
+	        #{url1080},
+	        #{token240},
+	        #{token480},
+	        #{token780},
+	        #{token1080},
+	        #{key240},
+	        #{key480},
+	        #{key780},
+	        #{key1080},
+	        #{vstatus},
+	        #{vkey},
+	        #{vavthumbTaskId},
+	        #{vavthumbStatus},
+	        #{vsampleTaskId},
+	        #{vsampleStatus},
+	        #{uploadIp},
+	        #{uploadTime},
+	        #{size},
+	        #{length}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list" >
+        INSERT INTO cms_video (
+	        id,
+	        cover_url,
+	        origin_url,
+	        url240,
+	        url480,
+	        url780,
+	        url1080,
+	        token240,
+	        token480,
+	        token780,
+	        token1080,
+	        key240,
+	        key480,
+	        key780,
+	        key1080,
+	        vstatus,
+	        vkey,
+	        vavthumb_task_id,
+	        vavthumb_status,
+	        vsample_task_id,
+	        vsample_status,
+	        upload_ip,
+	        upload_time,
+	        size,
+	        length
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.id},
+	        #{item.coverUrl},
+	        #{item.originUrl},
+	        #{item.url240},
+	        #{item.url480},
+	        #{item.url780},
+	        #{item.url1080},
+	        #{item.token240},
+	        #{item.token480},
+	        #{item.token780},
+	        #{item.token1080},
+	        #{item.key240},
+	        #{item.key480},
+	        #{item.key780},
+	        #{item.key1080},
+	        #{item.vstatus},
+	        #{item.vkey},
+	        #{item.vavthumbTaskId},
+	        #{item.vavthumbStatus},
+	        #{item.vsampleTaskId},
+	        #{item.vsampleStatus},
+	        #{item.uploadIp},
+	        #{item.uploadTime},
+	        #{item.size},
+	        #{item.length}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="CmsVideo">
+        UPDATE cms_video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="coverUrl != null">
+                cover_url = #{coverUrl},
+            </if>
+            <if test="originUrl != null">
+                origin_url = #{originUrl},
+            </if>
+            <if test="url240 != null">
+                url240 = #{url240},
+            </if>
+            <if test="url480 != null">
+                url480 = #{url480},
+            </if>
+            <if test="url780 != null">
+                url780 = #{url780},
+            </if>
+            <if test="url1080 != null">
+                url1080 = #{url1080},
+            </if>
+            <if test="token240 != null">
+                token240 = #{token240},
+            </if>
+            <if test="token480 != null">
+                token480 = #{token480},
+            </if>
+            <if test="token780 != null">
+                token780 = #{token780},
+            </if>
+            <if test="token1080 != null">
+                token1080 = #{token1080},
+            </if>
+            <if test="key240 != null">
+                key240 = #{key240},
+            </if>
+            <if test="key480 != null">
+                key480 = #{key480},
+            </if>
+            <if test="key780 != null">
+                key780 = #{key780},
+            </if>
+            <if test="key1080 != null">
+                key1080 = #{key1080},
+            </if>
+            <if test="vstatus != null">
+                vstatus = #{vstatus},
+            </if>
+            <if test="vkey != null">
+                vkey = #{vkey},
+            </if>
+            <if test="vavthumbTaskId != null">
+                vavthumb_task_id = #{vavthumbTaskId},
+            </if>
+            <if test="vavthumbStatus != null">
+                vavthumb_status = #{vavthumbStatus},
+            </if>
+            <if test="vsampleTaskId != null">
+                vsample_task_id = #{vsampleTaskId},
+            </if>
+            <if test="vsampleStatus != null">
+                vsample_status = #{vsampleStatus},
+            </if>
+            <if test="uploadIp != null">
+                upload_ip = #{uploadIp},
+            </if>
+            <if test="uploadTime != null">
+                upload_time = #{uploadTime},
+            </if>
+            <if test="size != null">
+                size = #{size},
+            </if>
+            <if test="length != null">
+                length = #{length},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="CmsVideo">
+        UPDATE cms_video
+        <trim prefix="SET" suffixOverrides=",">
+                cover_url = #{coverUrl},
+                origin_url = #{originUrl},
+                url240 = #{url240},
+                url480 = #{url480},
+                url780 = #{url780},
+                url1080 = #{url1080},
+                token240 = #{token240},
+                token480 = #{token480},
+                token780 = #{token780},
+                token1080 = #{token1080},
+                key240 = #{key240},
+                key480 = #{key480},
+                key780 = #{key780},
+                key1080 = #{key1080},
+                vstatus = #{vstatus},
+                vkey = #{vkey},
+                vavthumb_task_id = #{vavthumbTaskId},
+                vavthumb_status = #{vavthumbStatus},
+                vsample_task_id = #{vsampleTaskId},
+                vsample_status = #{vsampleStatus},
+                upload_ip = #{uploadIp},
+                upload_time = #{uploadTime},
+                size = #{size},
+                length = #{length},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE cms_video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.coverUrl!=null">
+                cover_url = #{update.coverUrl},
+            </if>
+            <if test="update.originUrl!=null">
+                origin_url = #{update.originUrl},
+            </if>
+            <if test="update.url240!=null">
+                url240 = #{update.url240},
+            </if>
+            <if test="update.url480!=null">
+                url480 = #{update.url480},
+            </if>
+            <if test="update.url780!=null">
+                url780 = #{update.url780},
+            </if>
+            <if test="update.url1080!=null">
+                url1080 = #{update.url1080},
+            </if>
+            <if test="update.token240!=null">
+                token240 = #{update.token240},
+            </if>
+            <if test="update.token480!=null">
+                token480 = #{update.token480},
+            </if>
+            <if test="update.token780!=null">
+                token780 = #{update.token780},
+            </if>
+            <if test="update.token1080!=null">
+                token1080 = #{update.token1080},
+            </if>
+            <if test="update.key240!=null">
+                key240 = #{update.key240},
+            </if>
+            <if test="update.key480!=null">
+                key480 = #{update.key480},
+            </if>
+            <if test="update.key780!=null">
+                key780 = #{update.key780},
+            </if>
+            <if test="update.key1080!=null">
+                key1080 = #{update.key1080},
+            </if>
+            <if test="update.vstatus!=null">
+                vstatus = #{update.vstatus},
+            </if>
+            <if test="update.vkey!=null">
+                vkey = #{update.vkey},
+            </if>
+            <if test="update.vavthumbTaskId!=null">
+                vavthumb_task_id = #{update.vavthumbTaskId},
+            </if>
+            <if test="update.vavthumbStatus!=null">
+                vavthumb_status = #{update.vavthumbStatus},
+            </if>
+            <if test="update.vsampleTaskId!=null">
+                vsample_task_id = #{update.vsampleTaskId},
+            </if>
+            <if test="update.vsampleStatus!=null">
+                vsample_status = #{update.vsampleStatus},
+            </if>
+            <if test="update.uploadIp!=null">
+                upload_ip = #{update.uploadIp},
+            </if>
+            <if test="update.uploadTime!=null">
+                upload_time = #{update.uploadTime},
+            </if>
+            <if test="update.size!=null">
+                size = #{update.size},
+            </if>
+            <if test="update.length!=null">
+                length = #{update.length},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.coverUrl!=null">
+                AND cover_url = #{condition.coverUrl}
+            </if>
+            <if test="condition.originUrl!=null">
+                AND origin_url = #{condition.originUrl}
+            </if>
+            <if test="condition.url240!=null">
+                AND url240 = #{condition.url240}
+            </if>
+            <if test="condition.url480!=null">
+                AND url480 = #{condition.url480}
+            </if>
+            <if test="condition.url780!=null">
+                AND url780 = #{condition.url780}
+            </if>
+            <if test="condition.url1080!=null">
+                AND url1080 = #{condition.url1080}
+            </if>
+            <if test="condition.token240!=null">
+                AND token240 = #{condition.token240}
+            </if>
+            <if test="condition.token480!=null">
+                AND token480 = #{condition.token480}
+            </if>
+            <if test="condition.token780!=null">
+                AND token780 = #{condition.token780}
+            </if>
+            <if test="condition.token1080!=null">
+                AND token1080 = #{condition.token1080}
+            </if>
+            <if test="condition.key240!=null">
+                AND key240 = #{condition.key240}
+            </if>
+            <if test="condition.key480!=null">
+                AND key480 = #{condition.key480}
+            </if>
+            <if test="condition.key780!=null">
+                AND key780 = #{condition.key780}
+            </if>
+            <if test="condition.key1080!=null">
+                AND key1080 = #{condition.key1080}
+            </if>
+            <if test="condition.vstatus!=null">
+                AND vstatus = #{condition.vstatus}
+            </if>
+            <if test="condition.vkey!=null">
+                AND vkey = #{condition.vkey}
+            </if>
+            <if test="condition.vavthumbTaskId!=null">
+                AND vavthumb_task_id = #{condition.vavthumbTaskId}
+            </if>
+            <if test="condition.vavthumbStatus!=null">
+                AND vavthumb_status = #{condition.vavthumbStatus}
+            </if>
+            <if test="condition.vsampleTaskId!=null">
+                AND vsample_task_id = #{condition.vsampleTaskId}
+            </if>
+            <if test="condition.vsampleStatus!=null">
+                AND vsample_status = #{condition.vsampleStatus}
+            </if>
+            <if test="condition.uploadIp!=null">
+                AND upload_ip = #{condition.uploadIp}
+            </if>
+            <if test="condition.uploadTime!=null">
+                AND upload_time = #{condition.uploadTime}
+            </if>
+            <if test="condition.length!=null">
+                AND length = #{condition.length}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM cms_video
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM cms_video WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM cms_video
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.coverUrl!=null">
+                AND cover_url = #{condition.coverUrl}
+            </if>
+            <if test="condition.originUrl!=null">
+                AND origin_url = #{condition.originUrl}
+            </if>
+            <if test="condition.url240!=null">
+                AND url240 = #{condition.url240}
+            </if>
+            <if test="condition.url480!=null">
+                AND url480 = #{condition.url480}
+            </if>
+            <if test="condition.url780!=null">
+                AND url780 = #{condition.url780}
+            </if>
+            <if test="condition.url1080!=null">
+                AND url1080 = #{condition.url1080}
+            </if>
+            <if test="condition.token240!=null">
+                AND token240 = #{condition.token240}
+            </if>
+            <if test="condition.token480!=null">
+                AND token480 = #{condition.token480}
+            </if>
+            <if test="condition.token780!=null">
+                AND token780 = #{condition.token780}
+            </if>
+            <if test="condition.token1080!=null">
+                AND token1080 = #{condition.token1080}
+            </if>
+            <if test="condition.key240!=null">
+                AND key240 = #{condition.key240}
+            </if>
+            <if test="condition.key480!=null">
+                AND key480 = #{condition.key480}
+            </if>
+            <if test="condition.key780!=null">
+                AND key780 = #{condition.key780}
+            </if>
+            <if test="condition.key1080!=null">
+                AND key1080 = #{condition.key1080}
+            </if>
+            <if test="condition.vstatus!=null">
+                AND vstatus = #{condition.vstatus}
+            </if>
+            <if test="condition.vkey!=null">
+                AND vkey = #{condition.vkey}
+            </if>
+            <if test="condition.vavthumbTaskId!=null">
+                AND vavthumb_task_id = #{condition.vavthumbTaskId}
+            </if>
+            <if test="condition.vavthumbStatus!=null">
+                AND vavthumb_status = #{condition.vavthumbStatus}
+            </if>
+            <if test="condition.vsampleTaskId!=null">
+                AND vsample_task_id = #{condition.vsampleTaskId}
+            </if>
+            <if test="condition.vsampleStatus!=null">
+                AND vsample_status = #{condition.vsampleStatus}
+            </if>
+            <if test="condition.uploadIp!=null">
+                AND upload_ip = #{condition.uploadIp}
+            </if>
+            <if test="condition.uploadTime!=null">
+                AND upload_time = #{condition.uploadTime}
+            </if>
+            <if test="condition.length!=null">
+                AND length = #{condition.length}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

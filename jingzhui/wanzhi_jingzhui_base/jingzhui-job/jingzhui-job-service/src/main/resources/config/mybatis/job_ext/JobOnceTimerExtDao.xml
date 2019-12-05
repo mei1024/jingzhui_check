@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solar.job.dal.dao.ext.JobOnceTimerExtDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        job_name as jobName,
+        job_group as jobGroup,
+        job_data as jobData,
+        proc as proc,
+        status as status,
+        next_exe_time as nextExeTime,
+        last_exe_start_time as lastExeStartTime,
+        last_exe_end_time as lastExeEndTime,
+        exe_start_time as exeStartTime,
+        exe_end_time as exeEndTime,
+        exe_count as exeCount,
+        retry_max_attempts as retryMaxAttempts,
+        retry_max_interval as retryMaxInterval,
+        result as result,
+        memo as memo,
+        dstatus as dstatus,
+        creator as creator,
+        create_date as createDate,
+        last_modifier as lastModifier,
+        last_mod_date as lastModDate,
+        version as version
+    </sql>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="JobOnceTimer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM job_once_timer
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.jobName!=null">
+                AND job_name = #{condition.jobName}
+            </if>
+            <if test="condition.jobGroup!=null">
+                AND job_group = #{condition.jobGroup}
+            </if>
+            <if test="condition.jobData!=null">
+                AND job_data = #{condition.jobData}
+            </if>
+            <if test="condition.status!=null">
+                AND status = #{condition.status}
+            </if>
+            <if test="condition.maxExeTime!=null">
+                AND next_exe_time <![CDATA[<=]]> #{condition.maxExeTime}
+            </if>
+            <if test="condition.retryMaxAttempts!=null">
+                AND retry_max_attempts = #{condition.retryMaxAttempts}
+            </if>
+            <if test="condition.retryMaxInterval!=null">
+                AND retry_max_interval = #{condition.retryMaxInterval}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+ 
+</mapper>

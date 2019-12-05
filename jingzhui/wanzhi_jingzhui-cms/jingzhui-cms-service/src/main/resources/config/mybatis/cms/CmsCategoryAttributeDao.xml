@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.cms.dal.dao.CmsCategoryAttributeDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        title as title,
+        keywords as keywords,
+        description as description,
+        data as data
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="CmsCategoryAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category_attribute
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="CmsCategoryAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category_attribute
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="CmsCategoryAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.title!=null">
+                AND title = #{condition.title}
+            </if>
+            <if test="condition.keywords!=null">
+                AND keywords = #{condition.keywords}
+            </if>
+            <if test="condition.description!=null">
+                AND description = #{condition.description}
+            </if>
+            <if test="condition.data!=null">
+                AND data = #{condition.data}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="CmsCategoryAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category_attribute
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="CmsCategoryAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.title!=null">
+                AND title = #{condition.title}
+            </if>
+            <if test="condition.keywords!=null">
+                AND keywords = #{condition.keywords}
+            </if>
+            <if test="condition.description!=null">
+                AND description = #{condition.description}
+            </if>
+            <if test="condition.data!=null">
+                AND data = #{condition.data}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="CmsCategoryAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category_attribute WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="CmsCategoryAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category_attribute WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsCategoryAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category_attribute
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.title!=null">
+                AND title = #{condition.title}
+            </if>
+            <if test="condition.keywords!=null">
+                AND keywords = #{condition.keywords}
+            </if>
+            <if test="condition.description!=null">
+                AND description = #{condition.description}
+            </if>
+            <if test="condition.data!=null">
+                AND data = #{condition.data}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="CmsCategoryAttribute">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.title!=null">
+               AND title like CONCAT('%', #{condition.title} , '%')
+            </if>
+            <if test="condition.keywords!=null">
+               AND keywords like CONCAT('%', #{condition.keywords} , '%')
+            </if>
+            <if test="condition.description!=null">
+               AND description like CONCAT('%', #{condition.description} , '%')
+            </if>
+            <if test="condition.data!=null">
+               AND data like CONCAT('%', #{condition.data} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_category_attribute
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.title!=null">
+                AND title = #{condition.title}
+            </if>
+            <if test="condition.keywords!=null">
+                AND keywords = #{condition.keywords}
+            </if>
+            <if test="condition.description!=null">
+                AND description = #{condition.description}
+            </if>
+            <if test="condition.data!=null">
+                AND data = #{condition.data}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM cms_category_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.title!=null">
+                AND title = #{condition.title}
+            </if>
+            <if test="condition.keywords!=null">
+                AND keywords = #{condition.keywords}
+            </if>
+            <if test="condition.description!=null">
+                AND description = #{condition.description}
+            </if>
+            <if test="condition.data!=null">
+                AND data = #{condition.data}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="CmsCategoryAttribute" >
+        INSERT INTO cms_category_attribute (
+	        id,
+	        title,
+	        keywords,
+	        description,
+	        data
+        ) VALUES (
+	        #{id},
+	        #{title},
+	        #{keywords},
+	        #{description},
+	        #{data}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list" >
+        INSERT INTO cms_category_attribute (
+	        id,
+	        title,
+	        keywords,
+	        description,
+	        data
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.id},
+	        #{item.title},
+	        #{item.keywords},
+	        #{item.description},
+	        #{item.data}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="CmsCategoryAttribute">
+        UPDATE cms_category_attribute
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="keywords != null">
+                keywords = #{keywords},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="data != null">
+                data = #{data},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="CmsCategoryAttribute">
+        UPDATE cms_category_attribute
+        <trim prefix="SET" suffixOverrides=",">
+                title = #{title},
+                keywords = #{keywords},
+                description = #{description},
+                data = #{data},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE cms_category_attribute
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.title!=null">
+                title = #{update.title},
+            </if>
+            <if test="update.keywords!=null">
+                keywords = #{update.keywords},
+            </if>
+            <if test="update.description!=null">
+                description = #{update.description},
+            </if>
+            <if test="update.data!=null">
+                data = #{update.data},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.title!=null">
+                AND title = #{condition.title}
+            </if>
+            <if test="condition.keywords!=null">
+                AND keywords = #{condition.keywords}
+            </if>
+            <if test="condition.description!=null">
+                AND description = #{condition.description}
+            </if>
+            <if test="condition.data!=null">
+                AND data = #{condition.data}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM cms_category_attribute
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM cms_category_attribute WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM cms_category_attribute
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.title!=null">
+                AND title = #{condition.title}
+            </if>
+            <if test="condition.keywords!=null">
+                AND keywords = #{condition.keywords}
+            </if>
+            <if test="condition.description!=null">
+                AND description = #{condition.description}
+            </if>
+            <if test="condition.data!=null">
+                AND data = #{condition.data}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

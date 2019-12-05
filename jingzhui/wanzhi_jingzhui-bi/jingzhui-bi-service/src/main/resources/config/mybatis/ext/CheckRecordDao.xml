@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+personNumber
+-->
+<mapper namespace="com.solar.bi.dal.dao.ext.CheckRecordExtDao">
+
+
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="personNumber" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM
+        (SELECT id FROM bi_check_record
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.checkType!=null">
+                AND check_type = #{condition.checkType}
+            </if>
+        </trim>
+        GROUP BY user_id)A
+   </select>
+
+</mapper>

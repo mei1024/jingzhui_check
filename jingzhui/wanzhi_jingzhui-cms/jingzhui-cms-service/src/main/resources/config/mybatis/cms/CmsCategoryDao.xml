@@ -1,0 +1,1227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+queryById
+queryByIdForLock
+queryOne
+queryAllList
+queryList
+queryOneByProperty
+queryListByProperty
+queryPage
+like
+count
+selectMaxId
+insert
+update
+updateNull
+deleteById
+deleteByProperty
+-->
+<mapper namespace="com.solar.cms.dal.dao.CmsCategoryDao">
+
+
+    <sql id="Base_Column_List">
+        id as id,
+        site_id as siteId,
+        name as name,
+        parent_id as parentId,
+        type_id as typeId,
+        child_ids as childIds,
+        tag_type_ids as tagTypeIds,
+        code as code,
+        template_path as templatePath,
+        path as path,
+        only_url as onlyUrl,
+        has_static as hasStatic,
+        url as url,
+        content_path as contentPath,
+        contain_child as containChild,
+        page_size as pageSize,
+        allow_contribute as allowContribute,
+        sortno as sortno,
+        hidden as hidden,
+        contents as contents,
+        extend_id as extendId,
+        memo as memo,
+        dstatus as dstatus,
+        creator as creator,
+        create_date as createDate,
+        last_modifier as lastModifier,
+        last_mod_date as lastModDate,
+        version as version
+    </sql>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryById" resultType="CmsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category
+        WHERE 
+        	id = #{id}
+    </select>
+    
+    <!-- 根据主键查询单条记录 -->
+    <select id="queryByIdForLock" resultType="CmsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category
+        WHERE 
+        	id = #{id}
+         for update
+    </select>
+
+    <!-- 根据MAP查询条件，查询一条数据 -->
+    <select id="queryOne" parameterType="java.util.Map" resultType="CmsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.parentId!=null">
+                AND parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.typeId!=null">
+                AND type_id = #{condition.typeId}
+            </if>
+            <if test="condition.childIds!=null">
+                AND child_ids = #{condition.childIds}
+            </if>
+            <if test="condition.tagTypeIds!=null">
+                AND tag_type_ids = #{condition.tagTypeIds}
+            </if>
+            <if test="condition.code!=null">
+                AND code = #{condition.code}
+            </if>
+            <if test="condition.templatePath!=null">
+                AND template_path = #{condition.templatePath}
+            </if>
+            <if test="condition.path!=null">
+                AND path = #{condition.path}
+            </if>
+            <if test="condition.onlyUrl!=null">
+                AND only_url = #{condition.onlyUrl}
+            </if>
+            <if test="condition.hasStatic!=null">
+                AND has_static = #{condition.hasStatic}
+            </if>
+            <if test="condition.url!=null">
+                AND url = #{condition.url}
+            </if>
+            <if test="condition.contentPath!=null">
+                AND content_path = #{condition.contentPath}
+            </if>
+            <if test="condition.containChild!=null">
+                AND contain_child = #{condition.containChild}
+            </if>
+            <if test="condition.pageSize!=null">
+                AND page_size = #{condition.pageSize}
+            </if>
+            <if test="condition.allowContribute!=null">
+                AND allow_contribute = #{condition.allowContribute}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.hidden!=null">
+                AND hidden = #{condition.hidden}
+            </if>
+            <if test="condition.contents!=null">
+                AND contents = #{condition.contents}
+            </if>
+            <if test="condition.extendId!=null">
+                AND extend_id = #{condition.extendId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        limit 1
+    </select>
+    
+    <!-- 查询所有记录 -->
+    <select id="queryAllList" resultType="CmsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，查询集合数据 -->
+    <select id="queryList" parameterType="java.util.Map" resultType="CmsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>        
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.parentId!=null">
+                AND parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.typeId!=null">
+                AND type_id = #{condition.typeId}
+            </if>
+            <if test="condition.childIds!=null">
+                AND child_ids = #{condition.childIds}
+            </if>
+            <if test="condition.tagTypeIds!=null">
+                AND tag_type_ids = #{condition.tagTypeIds}
+            </if>
+            <if test="condition.code!=null">
+                AND code = #{condition.code}
+            </if>
+            <if test="condition.templatePath!=null">
+                AND template_path = #{condition.templatePath}
+            </if>
+            <if test="condition.path!=null">
+                AND path = #{condition.path}
+            </if>
+            <if test="condition.onlyUrl!=null">
+                AND only_url = #{condition.onlyUrl}
+            </if>
+            <if test="condition.hasStatic!=null">
+                AND has_static = #{condition.hasStatic}
+            </if>
+            <if test="condition.url!=null">
+                AND url = #{condition.url}
+            </if>
+            <if test="condition.contentPath!=null">
+                AND content_path = #{condition.contentPath}
+            </if>
+            <if test="condition.containChild!=null">
+                AND contain_child = #{condition.containChild}
+            </if>
+            <if test="condition.pageSize!=null">
+                AND page_size = #{condition.pageSize}
+            </if>
+            <if test="condition.allowContribute!=null">
+                AND allow_contribute = #{condition.allowContribute}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.hidden!=null">
+                AND hidden = #{condition.hidden}
+            </if>
+            <if test="condition.contents!=null">
+                AND contents = #{condition.contents}
+            </if>
+            <if test="condition.extendId!=null">
+                AND extend_id = #{condition.extendId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+
+    <!-- 根据数据库字段名称+字段值进行查询单条数据 --> 
+    <select id="queryOneByProperty" parameterType="java.util.Map" resultType="CmsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+        LIMIT 1
+    </select>
+    
+    <!-- 根据数据库字段名称+字段值进行查询多条数据 --> 
+    <select id="queryListByProperty" parameterType="java.util.Map" resultType="CmsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category WHERE
+        ${property} = #{value}
+        <if test="orderBy!=null">
+            ORDER BY ${orderBy} ${sortBy}
+        </if>
+    </select>
+   
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.parentId!=null">
+                AND parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.typeId!=null">
+                AND type_id = #{condition.typeId}
+            </if>
+            <if test="condition.childIds!=null">
+                AND child_ids = #{condition.childIds}
+            </if>
+            <if test="condition.tagTypeIds!=null">
+                AND tag_type_ids = #{condition.tagTypeIds}
+            </if>
+            <if test="condition.code!=null">
+                AND code = #{condition.code}
+            </if>
+            <if test="condition.templatePath!=null">
+                AND template_path = #{condition.templatePath}
+            </if>
+            <if test="condition.path!=null">
+                AND path = #{condition.path}
+            </if>
+            <if test="condition.onlyUrl!=null">
+                AND only_url = #{condition.onlyUrl}
+            </if>
+            <if test="condition.hasStatic!=null">
+                AND has_static = #{condition.hasStatic}
+            </if>
+            <if test="condition.url!=null">
+                AND url = #{condition.url}
+            </if>
+            <if test="condition.contentPath!=null">
+                AND content_path = #{condition.contentPath}
+            </if>
+            <if test="condition.containChild!=null">
+                AND contain_child = #{condition.containChild}
+            </if>
+            <if test="condition.pageSize!=null">
+                AND page_size = #{condition.pageSize}
+            </if>
+            <if test="condition.allowContribute!=null">
+                AND allow_contribute = #{condition.allowContribute}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.hidden!=null">
+                AND hidden = #{condition.hidden}
+            </if>
+            <if test="condition.contents!=null">
+                AND contents = #{condition.contents}
+            </if>
+            <if test="condition.extendId!=null">
+                AND extend_id = #{condition.extendId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                       
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+	<!-- LIKE 模糊查找 -->
+    <select id="like" parameterType="java.util.Map" resultType="CmsCategory">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM cms_category
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+               AND id like CONCAT('%', #{condition.id} , '%')
+            </if>
+            <if test="condition.siteId!=null">
+               AND site_id like CONCAT('%', #{condition.siteId} , '%')
+            </if>
+            <if test="condition.name!=null">
+               AND name like CONCAT('%', #{condition.name} , '%')
+            </if>
+            <if test="condition.parentId!=null">
+               AND parent_id like CONCAT('%', #{condition.parentId} , '%')
+            </if>
+            <if test="condition.typeId!=null">
+               AND type_id like CONCAT('%', #{condition.typeId} , '%')
+            </if>
+            <if test="condition.childIds!=null">
+               AND child_ids like CONCAT('%', #{condition.childIds} , '%')
+            </if>
+            <if test="condition.tagTypeIds!=null">
+               AND tag_type_ids like CONCAT('%', #{condition.tagTypeIds} , '%')
+            </if>
+            <if test="condition.code!=null">
+               AND code like CONCAT('%', #{condition.code} , '%')
+            </if>
+            <if test="condition.templatePath!=null">
+               AND template_path like CONCAT('%', #{condition.templatePath} , '%')
+            </if>
+            <if test="condition.path!=null">
+               AND path like CONCAT('%', #{condition.path} , '%')
+            </if>
+            <if test="condition.onlyUrl!=null">
+               AND only_url like CONCAT('%', #{condition.onlyUrl} , '%')
+            </if>
+            <if test="condition.hasStatic!=null">
+               AND has_static like CONCAT('%', #{condition.hasStatic} , '%')
+            </if>
+            <if test="condition.url!=null">
+               AND url like CONCAT('%', #{condition.url} , '%')
+            </if>
+            <if test="condition.contentPath!=null">
+               AND content_path like CONCAT('%', #{condition.contentPath} , '%')
+            </if>
+            <if test="condition.containChild!=null">
+               AND contain_child like CONCAT('%', #{condition.containChild} , '%')
+            </if>
+            <if test="condition.pageSize!=null">
+               AND page_size like CONCAT('%', #{condition.pageSize} , '%')
+            </if>
+            <if test="condition.allowContribute!=null">
+               AND allow_contribute like CONCAT('%', #{condition.allowContribute} , '%')
+            </if>
+            <if test="condition.sortno!=null">
+               AND sortno like CONCAT('%', #{condition.sortno} , '%')
+            </if>
+            <if test="condition.hidden!=null">
+               AND hidden like CONCAT('%', #{condition.hidden} , '%')
+            </if>
+            <if test="condition.contents!=null">
+               AND contents like CONCAT('%', #{condition.contents} , '%')
+            </if>
+            <if test="condition.extendId!=null">
+               AND extend_id like CONCAT('%', #{condition.extendId} , '%')
+            </if>
+            <if test="condition.memo!=null">
+               AND memo like CONCAT('%', #{condition.memo} , '%')
+            </if>
+            <if test="condition.dstatus!=null">
+               AND dstatus like CONCAT('%', #{condition.dstatus} , '%')
+            </if>
+            <if test="condition.creator!=null">
+               AND creator like CONCAT('%', #{condition.creator} , '%')
+            </if>
+            <if test="condition.createDate!=null">
+               AND create_date like CONCAT('%', #{condition.createDate} , '%')
+            </if>
+            <if test="condition.lastModifier!=null">
+               AND last_modifier like CONCAT('%', #{condition.lastModifier} , '%')
+            </if>
+            <if test="condition.lastModDate!=null">
+               AND last_mod_date like CONCAT('%', #{condition.lastModDate} , '%')
+            </if>
+            <if test="condition.version!=null">
+               AND version like CONCAT('%', #{condition.version} , '%')
+            </if>
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>        
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_category
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.parentId!=null">
+                AND parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.typeId!=null">
+                AND type_id = #{condition.typeId}
+            </if>
+            <if test="condition.childIds!=null">
+                AND child_ids = #{condition.childIds}
+            </if>
+            <if test="condition.tagTypeIds!=null">
+                AND tag_type_ids = #{condition.tagTypeIds}
+            </if>
+            <if test="condition.code!=null">
+                AND code = #{condition.code}
+            </if>
+            <if test="condition.templatePath!=null">
+                AND template_path = #{condition.templatePath}
+            </if>
+            <if test="condition.path!=null">
+                AND path = #{condition.path}
+            </if>
+            <if test="condition.onlyUrl!=null">
+                AND only_url = #{condition.onlyUrl}
+            </if>
+            <if test="condition.hasStatic!=null">
+                AND has_static = #{condition.hasStatic}
+            </if>
+            <if test="condition.url!=null">
+                AND url = #{condition.url}
+            </if>
+            <if test="condition.contentPath!=null">
+                AND content_path = #{condition.contentPath}
+            </if>
+            <if test="condition.containChild!=null">
+                AND contain_child = #{condition.containChild}
+            </if>
+            <if test="condition.pageSize!=null">
+                AND page_size = #{condition.pageSize}
+            </if>
+            <if test="condition.allowContribute!=null">
+                AND allow_contribute = #{condition.allowContribute}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.hidden!=null">
+                AND hidden = #{condition.hidden}
+            </if>
+            <if test="condition.contents!=null">
+                AND contents = #{condition.contents}
+            </if>
+            <if test="condition.extendId!=null">
+                AND extend_id = #{condition.extendId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                        
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+   </select>
+
+    <!-- 根据MAP查询条件，查询最大ID -->
+    <select id="selectMaxId" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        	MAX(id)
+        FROM cms_category
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.parentId!=null">
+                AND parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.typeId!=null">
+                AND type_id = #{condition.typeId}
+            </if>
+            <if test="condition.childIds!=null">
+                AND child_ids = #{condition.childIds}
+            </if>
+            <if test="condition.tagTypeIds!=null">
+                AND tag_type_ids = #{condition.tagTypeIds}
+            </if>
+            <if test="condition.code!=null">
+                AND code = #{condition.code}
+            </if>
+            <if test="condition.templatePath!=null">
+                AND template_path = #{condition.templatePath}
+            </if>
+            <if test="condition.path!=null">
+                AND path = #{condition.path}
+            </if>
+            <if test="condition.onlyUrl!=null">
+                AND only_url = #{condition.onlyUrl}
+            </if>
+            <if test="condition.hasStatic!=null">
+                AND has_static = #{condition.hasStatic}
+            </if>
+            <if test="condition.url!=null">
+                AND url = #{condition.url}
+            </if>
+            <if test="condition.contentPath!=null">
+                AND content_path = #{condition.contentPath}
+            </if>
+            <if test="condition.containChild!=null">
+                AND contain_child = #{condition.containChild}
+            </if>
+            <if test="condition.pageSize!=null">
+                AND page_size = #{condition.pageSize}
+            </if>
+            <if test="condition.allowContribute!=null">
+                AND allow_contribute = #{condition.allowContribute}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.hidden!=null">
+                AND hidden = #{condition.hidden}
+            </if>
+            <if test="condition.contents!=null">
+                AND contents = #{condition.contents}
+            </if>
+            <if test="condition.extendId!=null">
+                AND extend_id = #{condition.extendId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.createDate!=null">
+                AND create_date = #{condition.createDate}
+            </if>
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </select>
+    
+
+     
+    <!-- 单条数据保存 -->
+    <insert id="insert" parameterType="CmsCategory" >
+        INSERT INTO cms_category (
+	        id,
+	        site_id,
+	        name,
+	        parent_id,
+	        type_id,
+	        child_ids,
+	        tag_type_ids,
+	        code,
+	        template_path,
+	        path,
+	        only_url,
+	        has_static,
+	        url,
+	        content_path,
+	        contain_child,
+	        page_size,
+	        allow_contribute,
+	        sortno,
+	        hidden,
+	        contents,
+	        extend_id,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES (
+	        #{id},
+	        #{siteId},
+	        #{name},
+	        #{parentId},
+	        #{typeId},
+	        #{childIds},
+	        #{tagTypeIds},
+	        #{code},
+	        #{templatePath},
+	        #{path},
+	        #{onlyUrl},
+	        #{hasStatic},
+	        #{url},
+	        #{contentPath},
+	        #{containChild},
+	        #{pageSize},
+	        #{allowContribute},
+	        #{sortno},
+	        #{hidden},
+	        #{contents},
+	        #{extendId},
+	        #{memo},
+	        #{dstatus},
+	        #{creator},
+	        #{createDate},
+	        #{lastModifier},
+	        #{lastModDate},
+	        #{version}
+        )
+    </insert>
+    
+    <!-- 多条数据保存 -->
+    <insert id="batchInsert" parameterType="list" >
+        INSERT INTO cms_category (
+	        id,
+	        site_id,
+	        name,
+	        parent_id,
+	        type_id,
+	        child_ids,
+	        tag_type_ids,
+	        code,
+	        template_path,
+	        path,
+	        only_url,
+	        has_static,
+	        url,
+	        content_path,
+	        contain_child,
+	        page_size,
+	        allow_contribute,
+	        sortno,
+	        hidden,
+	        contents,
+	        extend_id,
+	        memo,
+	        dstatus,
+	        creator,
+	        create_date,
+	        last_modifier,
+	        last_mod_date,
+	        version
+        ) VALUES 
+        <foreach collection="list" item="item" index="index" separator="," >(
+	        #{item.id},
+	        #{item.siteId},
+	        #{item.name},
+	        #{item.parentId},
+	        #{item.typeId},
+	        #{item.childIds},
+	        #{item.tagTypeIds},
+	        #{item.code},
+	        #{item.templatePath},
+	        #{item.path},
+	        #{item.onlyUrl},
+	        #{item.hasStatic},
+	        #{item.url},
+	        #{item.contentPath},
+	        #{item.containChild},
+	        #{item.pageSize},
+	        #{item.allowContribute},
+	        #{item.sortno},
+	        #{item.hidden},
+	        #{item.contents},
+	        #{item.extendId},
+	        #{item.memo},
+	        #{item.dstatus},
+	        #{item.creator},
+	        #{item.createDate},
+	        #{item.lastModifier},
+	        #{item.lastModDate},
+	        #{item.version}
+        )
+        </foreach> 
+        
+    </insert>
+    
+    <!-- 根据主键更新数据 -->
+    <update id="update" parameterType="CmsCategory">
+        UPDATE cms_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="siteId != null">
+                site_id = #{siteId},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="typeId != null">
+                type_id = #{typeId},
+            </if>
+            <if test="childIds != null">
+                child_ids = #{childIds},
+            </if>
+            <if test="tagTypeIds != null">
+                tag_type_ids = #{tagTypeIds},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="templatePath != null">
+                template_path = #{templatePath},
+            </if>
+            <if test="path != null">
+                path = #{path},
+            </if>
+            <if test="onlyUrl != null">
+                only_url = #{onlyUrl},
+            </if>
+            <if test="hasStatic != null">
+                has_static = #{hasStatic},
+            </if>
+            <if test="url != null">
+                url = #{url},
+            </if>
+            <if test="contentPath != null">
+                content_path = #{contentPath},
+            </if>
+            <if test="containChild != null">
+                contain_child = #{containChild},
+            </if>
+            <if test="pageSize != null">
+                page_size = #{pageSize},
+            </if>
+            <if test="allowContribute != null">
+                allow_contribute = #{allowContribute},
+            </if>
+            <if test="sortno != null">
+                sortno = #{sortno},
+            </if>
+            <if test="hidden != null">
+                hidden = #{hidden},
+            </if>
+            <if test="contents != null">
+                contents = #{contents},
+            </if>
+            <if test="extendId != null">
+                extend_id = #{extendId},
+            </if>
+            <if test="memo != null">
+                memo = #{memo},
+            </if>
+            <if test="dstatus != null">
+                dstatus = #{dstatus},
+            </if>
+            <if test="creator != null">
+                creator = #{creator},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate},
+            </if>
+            <if test="lastModifier != null">
+                last_modifier = #{lastModifier},
+            </if>
+            <if test="lastModDate != null">
+                last_mod_date = #{lastModDate},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+    
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateNull" parameterType="CmsCategory">
+        UPDATE cms_category
+        <trim prefix="SET" suffixOverrides=",">
+                site_id = #{siteId},
+                name = #{name},
+                parent_id = #{parentId},
+                type_id = #{typeId},
+                child_ids = #{childIds},
+                tag_type_ids = #{tagTypeIds},
+                code = #{code},
+                template_path = #{templatePath},
+                path = #{path},
+                only_url = #{onlyUrl},
+                has_static = #{hasStatic},
+                url = #{url},
+                content_path = #{contentPath},
+                contain_child = #{containChild},
+                page_size = #{pageSize},
+                allow_contribute = #{allowContribute},
+                sortno = #{sortno},
+                hidden = #{hidden},
+                contents = #{contents},
+                extend_id = #{extendId},
+                memo = #{memo},
+                dstatus = #{dstatus},
+                creator = #{creator},
+                create_date = #{createDate},
+                last_modifier = #{lastModifier},
+                last_mod_date = #{lastModDate},
+                version = #{version},
+        </trim>
+        WHERE
+        	id = #{id}
+    </update>
+
+    <!-- 更新带有空数据的字段 -->
+    <update id="updateByCondition" parameterType="java.util.Map">
+        UPDATE cms_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="update.siteId!=null">
+                site_id = #{update.siteId},
+            </if>
+            <if test="update.name!=null">
+                name = #{update.name},
+            </if>
+            <if test="update.parentId!=null">
+                parent_id = #{update.parentId},
+            </if>
+            <if test="update.typeId!=null">
+                type_id = #{update.typeId},
+            </if>
+            <if test="update.childIds!=null">
+                child_ids = #{update.childIds},
+            </if>
+            <if test="update.tagTypeIds!=null">
+                tag_type_ids = #{update.tagTypeIds},
+            </if>
+            <if test="update.code!=null">
+                code = #{update.code},
+            </if>
+            <if test="update.templatePath!=null">
+                template_path = #{update.templatePath},
+            </if>
+            <if test="update.path!=null">
+                path = #{update.path},
+            </if>
+            <if test="update.onlyUrl!=null">
+                only_url = #{update.onlyUrl},
+            </if>
+            <if test="update.hasStatic!=null">
+                has_static = #{update.hasStatic},
+            </if>
+            <if test="update.url!=null">
+                url = #{update.url},
+            </if>
+            <if test="update.contentPath!=null">
+                content_path = #{update.contentPath},
+            </if>
+            <if test="update.containChild!=null">
+                contain_child = #{update.containChild},
+            </if>
+            <if test="update.pageSize!=null">
+                page_size = #{update.pageSize},
+            </if>
+            <if test="update.allowContribute!=null">
+                allow_contribute = #{update.allowContribute},
+            </if>
+            <if test="update.sortno!=null">
+                sortno = #{update.sortno},
+            </if>
+            <if test="update.hidden!=null">
+                hidden = #{update.hidden},
+            </if>
+            <if test="update.contents!=null">
+                contents = #{update.contents},
+            </if>
+            <if test="update.extendId!=null">
+                extend_id = #{update.extendId},
+            </if>
+            <if test="update.memo!=null">
+                memo = #{update.memo},
+            </if>
+            <if test="update.dstatus!=null">
+                dstatus = #{update.dstatus},
+            </if>
+            <if test="update.creator!=null">
+                creator = #{update.creator},
+            </if>
+            <if test="update.createDate!=null">
+                create_date = #{update.createDate},
+            </if>
+            <if test="update.lastModifier!=null">
+                last_modifier = #{update.lastModifier},
+            </if>
+            <if test="update.lastModDate!=null">
+                last_mod_date = #{update.lastModDate},
+            </if>
+            <if test="update.version!=null">
+                version = #{update.version},
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>         
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.parentId!=null">
+                AND parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.typeId!=null">
+                AND type_id = #{condition.typeId}
+            </if>
+            <if test="condition.childIds!=null">
+                AND child_ids = #{condition.childIds}
+            </if>
+            <if test="condition.tagTypeIds!=null">
+                AND tag_type_ids = #{condition.tagTypeIds}
+            </if>
+            <if test="condition.code!=null">
+                AND code = #{condition.code}
+            </if>
+            <if test="condition.templatePath!=null">
+                AND template_path = #{condition.templatePath}
+            </if>
+            <if test="condition.path!=null">
+                AND path = #{condition.path}
+            </if>
+            <if test="condition.onlyUrl!=null">
+                AND only_url = #{condition.onlyUrl}
+            </if>
+            <if test="condition.hasStatic!=null">
+                AND has_static = #{condition.hasStatic}
+            </if>
+            <if test="condition.url!=null">
+                AND url = #{condition.url}
+            </if>
+            <if test="condition.contentPath!=null">
+                AND content_path = #{condition.contentPath}
+            </if>
+            <if test="condition.containChild!=null">
+                AND contain_child = #{condition.containChild}
+            </if>
+            <if test="condition.pageSize!=null">
+                AND page_size = #{condition.pageSize}
+            </if>
+            <if test="condition.allowContribute!=null">
+                AND allow_contribute = #{condition.allowContribute}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.hidden!=null">
+                AND hidden = #{condition.hidden}
+            </if>
+            <if test="condition.contents!=null">
+                AND contents = #{condition.contents}
+            </if>
+            <if test="condition.extendId!=null">
+                AND extend_id = #{condition.extendId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>
+    </update>
+    
+    <!-- 根据主键ID删除数据 -->
+    <delete id="deleteById">
+        DELETE FROM cms_category
+        WHERE
+        	id = #{id}
+    </delete>
+
+	<!-- 根据数据库字段名称+字段值 删除数据 -->
+    <delete id="deleteByProperty" parameterType="java.util.Map">
+        DELETE FROM cms_category WHERE
+        ${property} = #{value}
+    </delete>
+
+	<!-- 根据条件集合删除对象 -->
+    <delete id="deleteByCondition" parameterType="java.util.Map">
+        DELETE FROM cms_category
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.ids!=null and condition.ids.size() > 0">
+                AND id in<foreach collection="condition.ids" item="item" index="index" open="(" close=")" separator=",">#{item}</foreach>
+            </if>                
+            <if test="condition.id!=null">
+                AND id = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND site_id = #{condition.siteId}
+            </if>
+            <if test="condition.name!=null">
+                AND name = #{condition.name}
+            </if>
+            <if test="condition.parentId!=null">
+                AND parent_id = #{condition.parentId}
+            </if>
+            <if test="condition.typeId!=null">
+                AND type_id = #{condition.typeId}
+            </if>
+            <if test="condition.childIds!=null">
+                AND child_ids = #{condition.childIds}
+            </if>
+            <if test="condition.tagTypeIds!=null">
+                AND tag_type_ids = #{condition.tagTypeIds}
+            </if>
+            <if test="condition.code!=null">
+                AND code = #{condition.code}
+            </if>
+            <if test="condition.templatePath!=null">
+                AND template_path = #{condition.templatePath}
+            </if>
+            <if test="condition.path!=null">
+                AND path = #{condition.path}
+            </if>
+            <if test="condition.onlyUrl!=null">
+                AND only_url = #{condition.onlyUrl}
+            </if>
+            <if test="condition.hasStatic!=null">
+                AND has_static = #{condition.hasStatic}
+            </if>
+            <if test="condition.url!=null">
+                AND url = #{condition.url}
+            </if>
+            <if test="condition.contentPath!=null">
+                AND content_path = #{condition.contentPath}
+            </if>
+            <if test="condition.containChild!=null">
+                AND contain_child = #{condition.containChild}
+            </if>
+            <if test="condition.pageSize!=null">
+                AND page_size = #{condition.pageSize}
+            </if>
+            <if test="condition.allowContribute!=null">
+                AND allow_contribute = #{condition.allowContribute}
+            </if>
+            <if test="condition.sortno!=null">
+                AND sortno = #{condition.sortno}
+            </if>
+            <if test="condition.hidden!=null">
+                AND hidden = #{condition.hidden}
+            </if>
+            <if test="condition.contents!=null">
+                AND contents = #{condition.contents}
+            </if>
+            <if test="condition.extendId!=null">
+                AND extend_id = #{condition.extendId}
+            </if>
+            <if test="condition.memo!=null">
+                AND memo = #{condition.memo}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND dstatus = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND creator = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>                      
+            <if test="condition.lastModifier!=null">
+                AND last_modifier = #{condition.lastModifier}
+            </if>
+            <if test="condition.lastModDate!=null">
+                AND last_mod_date = #{condition.lastModDate}
+            </if>
+            <if test="condition.version!=null">
+                AND version = #{condition.version}
+            </if>
+        </trim>        
+    </delete>
+        
+</mapper>

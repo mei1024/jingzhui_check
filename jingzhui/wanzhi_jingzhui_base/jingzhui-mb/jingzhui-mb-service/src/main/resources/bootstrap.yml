@@ -1,0 +1,52 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: lark-mb-service
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+      
+ignored:
+  urls:
+    - /swagger-resources/**
+    - /webjars/**
+    - /swagger-ui.html/**
+    - /**/*.css
+    - /v2/api-docs/**
+    - /configuration/ui
+    - /configuration/security
+    - /monitor/**
+    - /icon/**
+    - /image/**
+    - /security/validate/**
+    - /security/validate/imgcode
+    - /security/user/token
+    - /security/user/logout
+    - /ds/**
+    - /wx/**
+    - /ms/security_code
+    - /cms/category/**
+    - /cms/tag/**
+    - /cms/news/**
+    - /cms/video/**
+    - /cms/expert/**
+    - /cms/content/**
+    - /cms/contact/**
+    - /cms/ad/**
+    - /media/**
+    - /pay/toqrpay.jpg
+    - /pay/notify/**
+    - /app/log
+    - /app/version/current
+    - /app/download/**
+    - /task/timer_notify
+    - /login
+    - /logout
+    - /current_time
+    
+    - /qa/categroy/**
+    - /qa/item/**
+    - /bi/check/record/count
+    

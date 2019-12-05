@@ -1,0 +1,6 @@
+dependencies {
+
+    /** solar-common **/
+    compile "com.solar:solar-common-core:${solarCommonVersion}"
+    compile "com.solar:solar-common-util:${solarCommonVersion}"
+}

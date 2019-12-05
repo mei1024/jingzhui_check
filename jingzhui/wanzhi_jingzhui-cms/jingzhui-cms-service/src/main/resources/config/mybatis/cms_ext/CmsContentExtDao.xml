@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solar.cms.dal.dao.ext.CmsContentExtDao">
+
+    <!-- 分页查找 -->
+    <select id="queryPage" resultType="CmsContent">
+        SELECT
+	        id as id,
+	        site_id as siteId,
+	        title as title,
+	        user_id as userId,
+	        check_user_id as checkUserId,
+	        category_id as categoryId,
+	        model_id as modelId,
+	        parent_id as parentId,
+	        copied as copied,
+	        author as author,
+	        editor as editor,
+	        only_url as onlyUrl,
+	        has_images as hasImages,
+	        has_files as hasFiles,
+	        has_static as hasStatic,
+	        url as url,
+	        description as description,
+	        tag_ids as tagIds,
+	        cover as cover,
+	        comments as comments,
+	        clicks as clicks,
+	        publish_date as publishDate,
+	        check_date as checkDate,
+	        sortno as sortno,
+	        status as status,
+	        memo as memo,
+	        dstatus as dstatus,
+	        creator as creator,
+	        create_date as createDate,
+	        last_modifier as lastModifier,
+	        last_mod_date as lastModDate,
+	        version as version
+        FROM cms_content a
+       <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.keyword!=null">
+                AND CONCAT( IFNULL(a.title,''), IFNULL(a.description,'')  ) LIKE CONCAT('%', #{condition.keyword} , '%')
+            </if> 
+            <if test="condition.tagId!=null">
+                AND a.tag_ids LIKE CONCAT('%', #{condition.tagId} , '%')
+            </if>       
+            <if test="condition.id!=null">
+                AND `id` = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND `site_id` = #{condition.siteId}
+            </if>
+            <if test="condition.title!=null">
+                AND `title` = #{condition.title}
+            </if>
+            <if test="condition.userId!=null">
+                AND `user_id` = #{condition.userId}
+            </if>
+            <if test="condition.checkUserId!=null">
+                AND `check_user_id` = #{condition.checkUserId}
+            </if>
+            <if test="condition.categoryId!=null">
+                AND `category_id` = #{condition.categoryId}
+            </if>
+            <if test="condition.modelId!=null">
+                AND `model_id` = #{condition.modelId}
+            </if>
+            <if test="condition.parentId!=null">
+                AND `parent_id` = #{condition.parentId}
+            </if>
+            <if test="condition.copied!=null">
+                AND `copied` = #{condition.copied}
+            </if>
+            <if test="condition.author!=null">
+                AND `author` = #{condition.author}
+            </if>
+            <if test="condition.editor!=null">
+                AND `editor` = #{condition.editor}
+            </if>
+            <if test="condition.hasImages!=null">
+                AND `has_images` = #{condition.hasImages}
+            </if>
+            <if test="condition.hasFiles!=null">
+                AND `has_files` = #{condition.hasFiles}
+            </if>
+            <if test="condition.hasStatic!=null">
+                AND `has_static` = #{condition.hasStatic}
+            </if>
+            <if test="condition.publishDate!=null">
+                AND `publish_date` = #{condition.publishDate}
+            </if>
+            <if test="condition.checkDate!=null">
+                AND `check_date` = #{condition.checkDate}
+            </if>
+            <if test="condition.status!=null">
+                AND `status` = #{condition.status}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND `dstatus` = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND `creator` = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+        </trim>
+        <if test="orderBy!=null">
+        ORDER BY ${orderBy} ${sortBy}
+        </if>
+        <if test="offset != null">
+            limit ${offset}, ${rows}
+        </if>
+    </select>
+    
+    <!-- 根据MAP查询条件，统计行数 -->
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*) FROM cms_content a
+              <trim prefix="WHERE" prefixOverrides="AND | OR">
+            <if test="condition.keyword!=null">
+                AND CONCAT( IFNULL(a.title,''), IFNULL(a.description,'')  ) LIKE CONCAT('%', #{condition.keyword} , '%')
+            </if> 
+            <if test="condition.tagId!=null">
+                AND a.tag_ids LIKE CONCAT('%', #{condition.tagId} , '%')
+            </if>       
+            <if test="condition.id!=null">
+                AND `id` = #{condition.id}
+            </if>
+            <if test="condition.siteId!=null">
+                AND `site_id` = #{condition.siteId}
+            </if>
+            <if test="condition.title!=null">
+                AND `title` = #{condition.title}
+            </if>
+            <if test="condition.userId!=null">
+                AND `user_id` = #{condition.userId}
+            </if>
+            <if test="condition.checkUserId!=null">
+                AND `check_user_id` = #{condition.checkUserId}
+            </if>
+            <if test="condition.categoryId!=null">
+                AND `category_id` = #{condition.categoryId}
+            </if>
+            <if test="condition.modelId!=null">
+                AND `model_id` = #{condition.modelId}
+            </if>
+            <if test="condition.parentId!=null">
+                AND `parent_id` = #{condition.parentId}
+            </if>
+            <if test="condition.copied!=null">
+                AND `copied` = #{condition.copied}
+            </if>
+            <if test="condition.author!=null">
+                AND `author` = #{condition.author}
+            </if>
+            <if test="condition.editor!=null">
+                AND `editor` = #{condition.editor}
+            </if>
+            <if test="condition.hasImages!=null">
+                AND `has_images` = #{condition.hasImages}
+            </if>
+            <if test="condition.hasFiles!=null">
+                AND `has_files` = #{condition.hasFiles}
+            </if>
+            <if test="condition.hasStatic!=null">
+                AND `has_static` = #{condition.hasStatic}
+            </if>
+            <if test="condition.publishDate!=null">
+                AND `publish_date` = #{condition.publishDate}
+            </if>
+            <if test="condition.checkDate!=null">
+                AND `check_date` = #{condition.checkDate}
+            </if>
+            <if test="condition.status!=null">
+                AND `status` = #{condition.status}
+            </if>
+            <if test="condition.dstatus!=null">
+                AND `dstatus` = #{condition.dstatus}
+            </if>
+            <if test="condition.creator!=null">
+                AND `creator` = #{condition.creator}
+            </if>
+            <if test="condition.minCreateDate!=null and condition.maxCreateDate!=null">
+                AND create_date between #{condition.minCreateDate} and #{condition.maxCreateDate}
+            </if>            
+        </trim>
+   </select>
+
+</mapper>
